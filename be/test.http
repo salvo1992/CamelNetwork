@@ -1,0 +1,18 @@
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "francoadesso@gmail.com",
+  "password": "000000000"
+}
+
+####
+
+POST http://localhost:8080/create
+Content-Type: application/json
+
+{ 
+  "title": "Test Post",
+  "description": "This is a test post",
+  "isFeatured":"true"
+}

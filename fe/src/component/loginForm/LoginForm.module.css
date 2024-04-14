@@ -1,0 +1,27 @@
+/* LoginForm.module.css */
+
+.title {
+    color: rgb(72, 166, 79);
+    font-weight: bold;
+    font-size: 50px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Ombreggiatura */
+    border-radius: 20px; /* Rendi il titolo ovale */
+    text-align: center; /* Allinea il testo al centro */
+    transform: perspective(200px) rotateX(-20deg); /* Trasforma il testo in un arco */
+    position: relative;
+    z-index: 1; /* Assicura che il testo sia sopra l'immagine */
+    margin-bottom: 20px; /* Aggiungi margine inferiore */
+}
+
+.textLong {
+    letter-spacing: 15px; /* Aggiungi spaziatura tra le lettere per allungare il testo */
+}
+
+.cardbodyColor {
+    background-color: #f8f9fa; /* Colore di sfondo */
+    border-radius: 20px;
+}
+
+.profileImage {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Ombreggiatura */
+}
