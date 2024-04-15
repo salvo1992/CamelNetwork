@@ -78,6 +78,8 @@ router.post('/newpost/create', verifyToken, async (req, res) => {
         // Crea il nuovo post utilizzando il nome dell'utente anziché l'ID
         const newpost = new newpostModel({
             Users: user.firstName, // Utilizza il nome dell'utente
+            firstName: user.firstName, // Aggiunge il firstName dell'utente al post
+            lastName: user.lastName, // Aggiunge il lastName dell'utente al post
             title: req.body.title,
             cover: req.body.cover,
             description: req.body.description,
@@ -102,6 +104,7 @@ router.post('/newpost/create', verifyToken, async (req, res) => {
         });
     }
 });
+
 
 router.patch('/newpost/update/:id', async (req, res) => {
     const { id } = req.params;

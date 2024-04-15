@@ -1,16 +1,24 @@
 const mongoose = require('mongoose');
 
-const newpostchema = new mongoose.Schema({
+const newpostSchema = new mongoose.Schema({
     Users: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'userModel'
+        type: String, // Modifica il tipo del campo Users in String
+        required: true
+    },
+    firstName: {
+        type: String, // Aggiungi il campo firstName
+        required: true
+    },
+    lastName: {
+        type: String, // Aggiungi il campo lastName
+        required: true
     },
     title: {
         type: String,
         required: true,
         max: 150
     },
-     cover: {
+    cover: {
         type: String,
         required: false,
         default: "https://picsum.photos/600/400"
@@ -30,4 +38,4 @@ const newpostchema = new mongoose.Schema({
     }
 }, { timestamps: true, strict: true })
 
-module.exports = mongoose.model('NewpostModel',newpostchema, 'newpost')
+module.exports = mongoose.model('NewpostModel', newpostSchema, 'newpost');

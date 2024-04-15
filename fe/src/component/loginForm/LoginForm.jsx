@@ -16,6 +16,7 @@ const LoginForm = ({ toggleForm }) => {
             const response = await client.post('/login', formData);
             if (response.token) {
                 localStorage.setItem('auth', JSON.stringify(response.token));
+                console.log("Token memorizzato nel localStorage:", response.token); 
                 setTimeout(() => {
                     navigate('/home');
                 }, 1500);
