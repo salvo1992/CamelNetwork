@@ -1,0 +1,129 @@
+/* CamelStories.module.css */
+.container {
+  position: fixed;
+  right: 0;
+  top: 200px;
+  width: 100px; 
+  height: calc(100% - 200px); 
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s ease; /* Transizione per l'effetto collapse */
+}
+
+.container:hover {
+  box-shadow: 0 0 20px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
+}
+
+.card {
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card video {
+  width: 100%;
+}
+
+.username {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  width: 100%;
+  text-align: left;
+}
+
+.videoButton {
+  padding: 4px 8px;
+  color: rgb(151, 16, 124);
+  background-color: transparent;;
+  border-radius: 20%;
+  border-color:rgb(241, 14, 226); ;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.videoButton:hover {
+  box-shadow: 0 0 8px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* Stili per il modale */
+.reactModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px; 
+  height: 200px; 
+  color: white;
+  background: rgba(234, 40, 144, 0.8);
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-color: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10%;
+  justify-content: center;
+}
+.reactModal:hover {
+  box-shadow: 0 0 15px rgba(198, 34, 121, 0.8); /* Glow rosa fluo al passaggio del mouse */
+}
+.inviaButton {
+  color: rgb(253, 252, 253);
+  background-color: transparent;
+  border-radius: 20%;
+  border-color: white;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: whitesmoke;
+  font-size: 24px;
+}
+
+.collapsed {
+  width: 30px;
+  padding: 5px;
+}
+
+.collapsed .videoButton {
+  display: none; /* Nascondi il bottone quando la sidebar è collassata */
+}
+
+.arrowButton {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 35px;
+  color: rgb(241, 14, 226);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrowButton:hover {
+  box-shadow: 0 0 8px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
+}
+
+.collapsed .arrowButton {
+  transform: translateY(-50%) rotate(360deg); /* Ruota la freccia di 180 gradi quando la sidebar è collassata */
+}

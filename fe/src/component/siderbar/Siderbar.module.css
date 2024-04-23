@@ -1,0 +1,60 @@
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 200px; /* Parte da 100px dall'alto */
+    height: calc(100% - 100px); /* Altezza adeguata per iniziare da 100px dall'alto */
+    width: 50px; /* Larghezza di default */
+    background: rgba(255, 255, 255, 0.5); /* Semi-transparent */
+    transition: width 0.5s;
+    overflow-y: auto;
+  }
+  
+  .sidebar.collapsed {
+    width: 30px; /* Raddoppia la larghezza quando espansa */
+  }
+  .sidebar:hover {
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
+  }
+  
+  .icon {
+    padding: 10px;
+    color: #6b4423; /* Default icon color */
+    transition: color 0.3s;
+  }
+  
+  .icon:hover {
+    color: rgba(255, 20, 147, 0.8); /* Color on hover */
+  }
+  
+  /* Custom scrollbar */
+  .sidebar::-webkit-scrollbar {
+    width: 5px; /* Scrollbar width */
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: darkgrey; /* Scrollbar color */
+    border-radius: 10px;
+  }
+  
+  .arrowButton {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 15px;
+    height: 35px;
+    color: rgb(241, 14, 226);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .arrowButton:hover {
+    box-shadow: 0 0 8px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
+  }
+  
+  .collapsed .arrowButton {
+    transform: translateY(-50%) rotate(360deg); /* Ruota la freccia di 180 gradi quando la sidebar è collassata */
+  }

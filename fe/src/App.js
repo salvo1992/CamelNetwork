@@ -3,6 +3,8 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import ProtectedRoutes from "./middlewares/ProtectedRoutes";
 import Success from "./pages/Success";
+import UserProfile from './component/UserProfile/UserProfile';
+import MainLayoutUser from './layouts/MainLayoutUser';
 
 const App = () => {
   console.log(process.env);
@@ -13,6 +15,7 @@ const App = () => {
               <Route path="/success" element={<Success />}/>
               <Route element={<ProtectedRoutes/>}>
                   <Route path="/home" element={<Home />} />
+                  <Route path="/UserProfile" element={<MainLayoutUser> <UserProfile /> </MainLayoutUser>} />
               </Route>
           </Routes>
       </Router>

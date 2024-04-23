@@ -1,0 +1,85 @@
+.footer {
+    background-color: #0d0d0d;
+    color: #e69807;
+    padding: 20px 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: auto; 
+   
+}
+
+.widget {
+    margin:  20px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.contact{
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.widgetTitle {
+    color: #e69807;
+    margin-bottom: 10px;
+}
+
+.link {
+    color: #e69807;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.listUnstyled {
+    list-style: none;
+    padding-left: 0;
+}
+
+.inputGroup {
+    display: flex;
+    margin-top: 10px;
+   
+}
+
+.formControl {
+    flex-grow: 1;
+    border: 3px solid #e69807;
+    padding: 8px;
+    color: #333;
+}
+
+.subscribeButton {
+    background-color: #e69807;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10%;
+    border: none;
+    cursor: pointer;
+}
+
+.socialMedia {
+    display: flex;
+    justify-content: space-between;
+    margin-top:10px;
+    margin-bottom: 20px;
+    flex-direction: column;
+}
+
+.credits {
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    color: #e69807;
+}
+
+.nav {
+    display: flex;
+    justify-content: flex-end;
+}
+

@@ -12,7 +12,9 @@ const newpostRoute = require('./route/newpost');
 const loginRoute = require('./route/login');
 const emailRoute = require('./route/sendEmail');
 const githubRoute = require('./route/github');
-const googleRouter = require('./route/google')
+const googleRouter = require('./route/google');
+const CamelStory =require('./route/CamelStory');
+const UserProfile=require('./route/UserProfile');
 const PORT = 8080;
 const app = express();
 
@@ -30,6 +32,8 @@ app.use('/', loginRoute);
 app.use('/', emailRoute);
 app.use('/', githubRoute);
 app.use('/', googleRouter);
+app.use('/', CamelStory);
+app.use('/', UserProfile);
 
 connectToDatabase()
 

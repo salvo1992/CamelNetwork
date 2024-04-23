@@ -1,0 +1,135 @@
+#main-navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    transition: background-color 0.3s;
+    z-index: 1030;
+    background-color: sandybrown !important;
+    height: 66px;
+
+    &.transparent {
+        background-color: transparent !important;
+    }
+
+    .container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .navbar-brand {
+        flex-grow: 1;  // Assicura che il brand occupi spazio per centrare il testo
+        display: flex;
+        align-items: center;
+        justify-content: center;  // Centra il logo e il testo al centro
+        
+
+        img {
+            position: absolute;
+            left: 10px;  // Mantiene il logo a sinistra
+        }
+
+        .camel-text {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px #000;
+            animation: text-glow 1.5s infinite alternate;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+
+            @keyframes text-glow {
+                from {
+                    text-shadow: 1px 1px 10px #fff, 0 0 25px #00e6e6, 0 0 5px #007373;
+                }
+                to {
+                    text-shadow: 1px 1px 20px #fff, 0 0 30px #00ace6, 0 0 10px #005757;
+                }
+            }
+        }
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        .nav-link, .btn {
+            color: #ffffff;
+            transition: all 0.3s ease;
+            animation: button-glow 1.5s infinite alternate;
+
+            &:hover {
+                color: darken(#ffffff, 10%);
+            }
+            @keyframes button-glow {
+                from {
+                    text-shadow: 1px 1px 10px #fff, 0 0 25px #00e6e6, 0 0 5px #007373;
+                }
+                to {
+                    text-shadow: 1px 1px 20px #fff, 0 0 30px #00ace6, 0 0 10px #005757;
+                }
+            }
+        }
+
+        .btn {
+            border: 2px solid #ffffff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background-color: transparent;
+           
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
+        }
+    }
+    .nav-item{
+        padding: 10px;
+    }
+
+    .dropdown-toggle {
+        display:none; // Inizialmente nascosto
+        padding: 10px;
+        border-radius: 25%;
+        border: 2px solid #ffffff;
+        background-color: transparent;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        margin-left: auto; // Spinge il bottone tutto a destra
+
+        &:hover {
+            background-color: rgba(252, 248, 248, 0.963);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        @keyframes dropdown-menu-button-glow {
+            from {
+                text-shadow: 1px 1px 10px #fff, 0 0 25px #00e6e6, 0 0 5px #007373;
+            }
+            to {
+                text-shadow: 1px 1px 20px #fff, 0 0 30px #00ace6, 0 0 10px #005757;
+            }
+        }
+        @media (max-width: 991px) {
+            display: block; // Mostra il bottone dropdown in vista mobile
+        }
+    }
+
+    @media (max-width: 991px) {
+        .nav-item {
+            display: none; // Nasconde gli elementi della navbar
+        }
+
+        .navbar-brand {
+            justify-content: flex-end; // Mantiene il logo a sinistra
+        }
+
+        .dropdown-menu-button {
+            display: block; // Mostra il bottone dropdown in vista mobile
+        }
+       
+    }
+}

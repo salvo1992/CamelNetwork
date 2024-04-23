@@ -1,34 +1,40 @@
-.cardContainer {
-    height: 100%;
-    min-height: calc(100vh - 546px);
-}
 .pageContainer {
-    background-color: sandybrown;
-  }
+    background-color: sandybrown !important;
+    height: 80%; /* Modificato da 40% a 80% per coprire più spazio verticalmente */
+    width: 80%; /* Larghezza del container */
+    margin: auto; /* Centra il container orizzontalmente e verticalmente */
+    display: flex; /* Usa Flexbox per allineare i contenuti */
+    flex-direction: column; /* Imposta la direzione dei flex items */
+    justify-content: center; /* Centra i contenuti verticalmente */
+    align-items: center; /* Centra i contenuti orizzontalmente */
+    position: relative; /* Posizionamento relativo per posizionare assolutamente le card al suo interno */
+}
 
-
-
-/* Modifica la larghezza e il margine delle card */
 .cardWrapper {
-    width: 100%; /* Larghezza della card */
+    width: 100%; /* Larghezza della card mantenuta al 100% del suo container */
     margin-bottom: 1rem; /* Margine inferiore */
     height: 400px; /* Altezza fissa per tutte le card */
     overflow: hidden; /* Nasconde il contenuto in eccesso */
-}
-/* Stile della card */
-.card {
-    border-radius: 8px; /* Bordi arrotondati */
-    background-color: sandybrown; /* Sfondo */
-    overflow: hidden; /* Nasconde il contenuto in eccesso */
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transizioni per ombra e trasformazione */
-}
-/* Effetto allargamento della card al passaggio del mouse */
-.card:hover {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Ombra più evidente */
-    transform: scale(1.05); /* Effetto di allargamento */
+    transition: transform 0.3s ease; /* Transizione per l'effetto di allargamento */
+    position: relative; /* Impostato su relative per permettere la corretta transizione e sovrapposizione */
 }
 
-/* Immagine della card */
+.card {
+    border-radius: 8px; /* Bordi arrotondati */
+    background-color: rgb(254, 208, 92); /* Sfondo */
+    overflow: hidden; /* Nasconde il contenuto in eccesso */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transizioni per ombra e trasformazione */
+    width: 100%; /* Larghezza della card */
+    position: static; /* Rimosso absolute per evitare problemi di posizionamento */
+}
+
+.card:hover, .cardActive {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Ombra più evidente */
+    transform: scale(1.05); /* Effetto di allargamento */
+    background-color: sandybrown; /* Sfondo modificato al hover */
+    z-index: 10; /* Aumenta lo z-index al hover per mantenere la card sopra le altre */
+}
+
 .cardImage {
     width: 100%; /* Larghezza dell'immagine */
     height: 200px; /* Altezza fissa dell'immagine */
@@ -36,39 +42,8 @@
     border-radius: 8px 8px 0 0; /* Bordi arrotondati solo in alto */
 }
 
-/* Stile del corpo della card */
-.cardBody {
-    flex: 1; /* Fa espandere il corpo per occupare lo spazio disponibile */
-    padding: 1rem; /* Padding */
-    display: flex; /* Imposta il display a flex per allineare i figli */
-    flex-direction: column; /* Allinea i figli in direzione verticale */
+.cardActive .cardImage {
+    height: 400px; /* Altezza maggiore dell'immagine per mostrare l'immagine intera */
 }
 
-/* Stile del titolo */
-.title {
-    color: rgb(72, 166, 79); /* Colore verde */
-    margin-top: 0; /* Rimuovi il margine superiore */
-}
-
-/* Stile della descrizione */
-.description {
-    margin-bottom: 0; /* Rimuovi il margine inferiore */
-    flex: 1; /* Fa espandere la descrizione per occupare lo spazio disponibile */
-}
-
-/* Stile del footer della card */
-.cardFooter {
-    padding: 1rem; /* Padding */
-}
-
-/* Stile del nome utente */
-.username {
-    color: rgb(72, 166, 79); /* Colore verde */
-    margin-bottom: 0; /* Rimuovi il margine inferiore */
-}
-
-/* Stile della data */
-.date {
-    color: #333; /* Colore grigio scuro */
-    font-size: 0.9rem; /* Dimensione del carattere */
-}
+/* Altri stili rimangono invariati */
