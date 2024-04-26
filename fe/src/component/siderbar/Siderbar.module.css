@@ -7,6 +7,7 @@
     background: rgba(255, 255, 255, 0.5); /* Semi-transparent */
     transition: width 0.5s;
     overflow-y: auto;
+    padding-top: 5px;
   }
   
   .sidebar.collapsed {
@@ -15,9 +16,20 @@
   .sidebar:hover {
     box-shadow: 0 0 20px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
   }
+  .icon-container {
+    /* Rimuovi il padding da .icon-container */
+    padding: 0;
+    /* Imposta l'altezza delle icone sulla metà dell'altezza della sidebar */
+    height: calc(50% - 10px); /* 10px di padding sopra e sotto */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
   
   .icon {
     padding: 10px;
+    display: flex;
     color: #6b4423; /* Default icon color */
     transition: color 0.3s;
   }
@@ -25,6 +37,7 @@
   .icon:hover {
     color: rgba(255, 20, 147, 0.8); /* Color on hover */
   }
+
   
   /* Custom scrollbar */
   .sidebar::-webkit-scrollbar {

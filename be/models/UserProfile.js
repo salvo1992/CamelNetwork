@@ -15,7 +15,7 @@ const userProfileSchema = new mongoose.Schema({
         default: '/assets/default_banner.jpg'
     },
     biography: String
-});
+}, { timestamps: true, strict:true })
 
 const UserProfile = mongoose.model('UserProfile', userProfileSchema);
 

@@ -12,7 +12,7 @@ const newpostRoute = require('./route/newpost');
 const loginRoute = require('./route/login');
 const emailRoute = require('./route/sendEmail');
 const githubRoute = require('./route/github');
-const googleRouter = require('./route/google');
+const googleRoute = require('./route/google');
 const CamelStory =require('./route/CamelStory');
 const UserProfile=require('./route/UserProfile');
 const PORT = 8080;
@@ -31,7 +31,7 @@ app.use('/', newpostRoute);
 app.use('/', loginRoute);
 app.use('/', emailRoute);
 app.use('/', githubRoute);
-app.use('/', googleRouter);
+app.use('/', googleRoute);
 app.use('/', CamelStory);
 app.use('/', UserProfile);
 

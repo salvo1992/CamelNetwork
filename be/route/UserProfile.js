@@ -27,6 +27,8 @@ router.post('/updateProfileImages', verifyToken, parser.fields([
     { name: 'profileImage', maxCount: 1 },
     { name: 'bannerImage', maxCount: 1 }
 ]), async (req, res) => {
+    console.log('Richiesta di aggiornamento immagini ricevuta');
+    console.log(req.files);
     try {
         const userId = req.user.id;
         const updates = {};
@@ -39,12 +41,31 @@ router.post('/updateProfileImages', verifyToken, parser.fields([
         }
 
         const updatedProfile = await UserProfile.updateOne({ _id: userId }, { $set: updates });
+        console.log('Immagini aggiornate con successo');
         res.json({ message: 'Immagini aggiornate con successo', profile: updatedProfile });
     } catch (error) {
         console.error('Errore nell aggiornamento delle immagini:', error);
         res.status(500).send({ message: 'Errore durante l aggiornamento delle immagini', error });
     }
 });
+
+router.get('/userProfile', verifyToken, async (req, res) => {
+    console.log('Richiesta di profilo utente ricevuta');
+    try {
+        const userId = req.user.id;
+        const userProfile = await UserProfile.findOne({ userId });
+        if (!userProfile) {
+            console.log('Profilo utente non trovato');
+            return res.status(404).json({ message: 'Profilo utente non trovato' });
+        }
+        console.log('Dati del profilo inviati con successo');
+        res.json(userProfile);
+    } catch (error) {
+        console.error('Errore nel caricamento dei dati del profilo:', error);
+        res.status(500).json({ message: 'Errore nel caricamento dei dati del profilo' });
+    }
+});
+
 
 module.exports = router;
 

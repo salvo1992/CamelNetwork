@@ -103,7 +103,7 @@ const MainContent = () => {
 })}
             </div>
             <AddNewPostModal />
-            <UserProfile userPosts={newPosts} />
+            <UserProfile  token={token} />
 
         </div>
     );

@@ -22,6 +22,8 @@ module.exports = function (req, res, next) {
         req.user = verified;
         next();  // Procedi al middleware successivo o al gestore della richiesta
     } catch (e) {
+        console.log("Authorization Header:", authHeader);
+        console.error("Errore durante la verifica del token:", e);
         res.status(403).send({
             statusCode: 403,
             message: 'Il tuo token non è valido o è scaduto!'
