@@ -26,12 +26,12 @@ function Sidebar() {
   </Link>
 </div>
 <div >
-  <Link className={styles.icon} to="/inbox">
+  <Link className={styles.icon} to="/CamelChat">
     <FaEnvelope />
   </Link>
 </div>
 <div >
-  <Link className={styles.icon} to="/notifications">
+  <Link className={styles.icon} to="/notificationsSettings">
     <FaBell />
   </Link>
 </div>
@@ -41,7 +41,7 @@ function Sidebar() {
   </Link>
 </div>
 <div >
-  <Link className={styles.icon} to="/logout">
+  <Link className={styles.icon} to="/#">
     <FaPowerOff />
   </Link>
 </div>

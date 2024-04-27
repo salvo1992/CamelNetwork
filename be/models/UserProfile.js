@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
 const userProfileSchema = new mongoose.Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    firstName: {
+         type: String,
+          required: true
+         },
+    lastName: {
+         type: String,
+          required: true
+         },
+    
     profileImage: {
         type: String,
         default: '/assets/default_profile.jpg'
@@ -14,9 +18,12 @@ const userProfileSchema = new mongoose.Schema({
         type: String,
         default: '/assets/default_banner.jpg'
     },
-    biography: String
+    biography:{
+        type:String
+    }
+
 }, { timestamps: true, strict:true })
 
-const UserProfile = mongoose.model('UserProfile', userProfileSchema);
+module.exports = mongoose.model('UserProfileModel', userProfileSchema,'UserProfile');
 
-module.exports = UserProfile;
+

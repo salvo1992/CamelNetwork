@@ -1,29 +1,21 @@
 const jwt = require('jsonwebtoken');
 
-module.exports = function (req, res, next) {
+module.exports = function(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ message: "Accesso negato. Token non fornito." });
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+        return res.status(401).json({ message: "Accesso negato. Token non fornito." });
+    }
     try {
-        const authHeader = req.headers['authorization'];  // Assicurati che il front-end invii l'header auth in questo modo
-        if (!authHeader) {
-            return res.status(401).send({
-                message: 'Accesso negato. Token non fornito.',
-                statusCode: 401
-            });
-        }
-
-        const token = authHeader.split(' ')[1];  // Estrai il token da "Bearer <token>"
-        if (!token) {
-            return res.status(401).send({
-                message: 'Accesso negato. Token non fornito.',
-                statusCode: 401
-            });
-        }
-
-        const verified = jwt.verify(token, process.env.SECRET_KEY);
-        req.user = verified;
-        next();  // Procedi al middleware successivo o al gestore della richiesta
-    } catch (e) {
-        console.log("Authorization Header:", authHeader);
-        console.error("Errore durante la verifica del token:", e);
+        const decoded = jwt.verify(token, process.env.SECRET_KEY);
+        console.log("Utente decodificato:", decoded);
+        req.user = decoded;
+        next();
+    } catch (error) {
         res.status(403).send({
             statusCode: 403,
             message: 'Il tuo token non è valido o è scaduto!'

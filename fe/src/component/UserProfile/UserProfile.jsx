@@ -5,9 +5,9 @@ import { decodeToken } from 'react-jwt';
 import useSession from '../../hooks/useSession';
 
 function UserProfile() {
-    const token = useAuthToken();
-    const decodedToken = decodeToken(token);
-    const userSession = useSession();
+    const token = useAuthToken(); // Ottieni il token che contiene le informazioni dell'utente
+    const decodedToken = decodeToken(token); // Decodifica il token per ottenere dettagli come firstName e lastName
+    const userSession = useSession(); // Informazioni di sessione (potrebbe includere dati aggiuntivi)
     const [profileImage, setProfileImage] = useState('/assets/camel_logo.jpg');
     const [bannerImage, setBannerImage] = useState('/assets/banner_camel2.webp');
     const [userPosts, setUserPosts] = useState([]);
@@ -22,19 +22,29 @@ function UserProfile() {
                         Authorization: `Bearer ${token}`,
                     },
                 });
+                if (profileResponse.status === 403) {
+                    throw new Error("Accesso negato: forse il token è scaduto o non valido.");
+                }
+                if (profileResponse.status === 404) {
+                    throw new Error("Profilo utente non trovato.");
+                }
+                if (!profileResponse.ok) {
+                    throw new Error(`Errore HTTP: ${profileResponse.status}`);
+                }
                 const profileData = await profileResponse.json();
-                setProfileImage(profileData.profileImage || '/assets/default_profile.jpg');
-                setBannerImage(profileData.bannerImage || '/assets/default_banner.jpg');
+                // Imposta i dati del profilo
             } catch (error) {
-                console.error('Errore nel caricamento dei dati del profilo:', error);
+                console.error('Errore nel caricamento dei dati del profilo:', error.message);
             }
         };
-
+    
         loadProfileData();
-    }, [token]);
-
+    }, [token]); // Aggiunge token come dipendenza per ricaricare i dati quando cambia
+    
     useEffect(() => {
-        const loadUserPosts = async () => {
+        // Carica i post dell'utente, se necessario
+        // Questo codice è commentato per evitare interferenze durante il debugging
+        /* const loadUserPosts = async () => {
             if (!decodedToken) {
                 return;
             }
@@ -46,12 +56,14 @@ function UserProfile() {
                 },
             });
 
-            const data = await response.json();
-            setUserPosts(data.newposts || []);
+            if (response.ok) {
+                const data = await response.json();
+                setUserPosts(data.newposts || []);
+            }
         };
 
-        loadUserPosts();
-    }, [token, decodedToken, page, pageSize]);
+        loadUserPosts(); */
+    }, [token, decodedToken, page, pageSize]); // Aggiunge le dipendenze necessarie
 
     const handleImageChange = async (e, setImage, fieldName) => {
         const file = e.target.files[0];
@@ -79,31 +91,37 @@ function UserProfile() {
         }
     };
 
-    const handleBannerImageChange = (e) => handleImageChange(e, setBannerImage, 'bannerImage');
-    const handleProfileImageChange = (e) => handleImageChange(e, setProfileImage, 'profileImage');
+    const handleBannerImageChange = (e) => {
+        handleImageChange(e, setBannerImage, 'bannerImage');
+    };
+
+    const handleProfileImageChange = (e) => {
+        handleImageChange(e, setProfileImage, 'profileImage');
+    };
+
 
     return (
         <div className={styles.userProfile}>
             <div className={styles.profileBanner}>
                 <img src={bannerImage} alt="Banner" />
-                <input type="file" onChange={handleBannerImageChange} accept="image/*" />
+                <input type="file" onChange={(e) => handleBannerImageChange(e)} accept="image/*" />
             </div>
             <div className={styles.profileContent}>
                 <div className={styles.profileSidebar}>
                     <img src={profileImage} alt="Profile" className="rounded-circle" />
-                    <input type="file" onChange={handleProfileImageChange} accept="image/*" />
+                    <input type="file" onChange={(e) => handleProfileImageChange(e)} accept="image/*" />
                     <h1>{userSession.firstName} {userSession.lastName}</h1>
                     <p>Breve descrizione o biografia dell'utente.</p>
                 </div>
                 <div className={styles.profileMain}>
                     <h2>Ultimi Post</h2>
                     <div className={styles.posts}>
-                    {userPosts.map((post) => (  //Assicurati che post.id sia unico
-                        <div key={post.id}>  
-                         <h3>{post.title}</h3>
-                         <p>{post.description}</p>
-                        </div>
-                         ))}
+                        {userPosts.map((post) => (
+                            <div key={post.id}> {/* Assicurati che post.id sia unico */}
+                                <h3>{post.title}</h3>
+                                <p>{post.description}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -112,6 +130,7 @@ function UserProfile() {
 }
 
 export default UserProfile;
+
 
 
 

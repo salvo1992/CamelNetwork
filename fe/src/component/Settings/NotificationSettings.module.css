@@ -1,0 +1,95 @@
+.container {
+    background-color: #faf3e0; /* Colore sabbia */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+  }
+  
+  .buttons {
+    margin-bottom: 20px;
+  }
+  
+  .button {
+    background-color: #f0e1c9; /* Colore sabbia più chiaro */
+    color: #6b4423; /* Colore marrone */
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #e0d1b9; /* Leggermente più scuro al passaggio del mouse */
+  }
+  
+  .active {
+    background-color: #d1c3a9; /* Colore sabbia più scuro per il pulsante attivo */
+  }
+  
+  .navbar {
+    margin-bottom: 20px;
+  }
+  
+  .search {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .icon {
+    background-color: #f0e1c9; /* Colore sabbia più chiaro */
+    color: #6b4423; /* Colore marrone */
+    border: none;
+    padding: 8px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .icon:hover {
+    background-color: #e0d1b9; /* Leggermente più scuro al passaggio del mouse */
+  }
+  
+  .notificationIcon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .deleteButton {
+    background-color: #ff6666; /* Colore rosso */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .deleteButton:hover {
+    background-color: #ff4d4d; /* Leggermente più scuro al passaggio del mouse */
+  }
+  
+  .notificationCard {
+    background-color: #fff; /* Colore bianco */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .notification {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .notification span {
+    margin-left: 10px;
+  }
+  

@@ -20,4 +20,4 @@ const camelStorySchema = new mongoose.Schema({
   }
 },{ timestamps: true, strict: true });
 
-module.exports = mongoose.model('CamelStory', camelStorySchema);
+module.exports = mongoose.model('camelStoryModel',camelStorySchema, 'CamelStory');

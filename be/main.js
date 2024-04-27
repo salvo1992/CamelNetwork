@@ -13,8 +13,9 @@ const loginRoute = require('./route/login');
 const emailRoute = require('./route/sendEmail');
 const githubRoute = require('./route/github');
 const googleRoute = require('./route/google');
-const CamelStory =require('./route/CamelStory');
-const UserProfile=require('./route/UserProfile');
+const CamelStoryRoute =require('./route/CamelStory');
+const UserProfileRoute=require('./route/UserProfile');
+const messageRoute = require('./route/message');
 const PORT = 8080;
 const app = express();
 
@@ -32,8 +33,9 @@ app.use('/', loginRoute);
 app.use('/', emailRoute);
 app.use('/', githubRoute);
 app.use('/', googleRoute);
-app.use('/', CamelStory);
-app.use('/', UserProfile);
+app.use('/', CamelStoryRoute);
+app.use('/', UserProfileRoute);
+app.use('/', messageRoute);
 
 connectToDatabase()
 

@@ -10,12 +10,12 @@ function Settings() {
       <div className={styles.setting}>
         <FaUser className={styles.icon} />
         <div className={styles.label}>Modifica Profilo</div>
-        <Link to="/settings/profile" className={styles.link}>Modifica</Link>
+        <Link to="/ProfileSettings" className={styles.link}>Modifica</Link>
       </div>
       <div className={styles.setting}>
         <FaEnvelope className={styles.icon} />
         <div className={styles.label}>Modifica Email</div>
-        <Link to="/settings/email" className={styles.link}>Modifica</Link>
+        <Link to="/EmailSettings" className={styles.link}>Modifica</Link>
       </div>
       <div className={styles.setting}>
         <FaLock className={styles.icon} />
@@ -25,12 +25,12 @@ function Settings() {
       <div className={styles.setting}>
         <FaLanguage className={styles.icon} />
         <div className={styles.label}>Lingua e regione</div>
-        <Link to="/settings/language" className={styles.link}>Modifica</Link>
+        <Link to="/LanguageSettings" className={styles.link}>Modifica</Link>
       </div>
       <div className={styles.setting}>
         <FaBell className={styles.icon} />
         <div className={styles.label}>Notifiche</div>
-        <Link to="/settings/notifications" className={styles.link}>Modifica</Link>
+        <Link to="/NotificationsSettings" className={styles.link}>Modifica</Link>
       </div>
       <div className={styles.setting}>
         <FaShieldAlt className={styles.icon} />
