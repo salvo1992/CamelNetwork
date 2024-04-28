@@ -16,3 +16,12 @@ Content-Type: application/json
   "description": "This is a test post",
   "isFeatured":"true"
 }
+
+####
+POST http://localhost:8080/updateProfileImages
+Content-Type: application/json
+
+{
+ "path": "https://res.cloudinary.com/dmxpuunwf/image/upload/v1714257434/CamelNetwork/UserProfile/user_undefined_1714257433001.png",
+}  
+    

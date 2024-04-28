@@ -15,7 +15,6 @@ const SignupForm = ({ toggleForm }) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log(process.env.REACT_APP_SERVER_BASE_URL);
             const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/createUser`, {
                 method: 'POST',
                 headers: {
@@ -24,8 +23,11 @@ const SignupForm = ({ toggleForm }) => {
                 body: JSON.stringify(signupFormData)
             });
             
+            
             if (response.ok) {
-                // Successo, puoi gestire la risposta qui
+                const responseData = await response.json();
+                const token = responseData.token;
+                localStorage.setItem('auth', token); // Salva il token nel localStorage
             } else {
                 // Gestione degli errori
                 throw new Error('Errore nella richiesta di registrazione');

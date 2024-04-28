@@ -1,128 +1,110 @@
 import React, { useState, useEffect } from 'react';
 import styles from './UserProfile.module.css';
-import useAuthToken from '../../hooks/useAuthToken';
+import useAuthToken from '../../hooks/useAuthToken';  
 import { decodeToken } from 'react-jwt';
 import useSession from '../../hooks/useSession';
+import axios from 'axios';
+
 
 function UserProfile() {
-    const token = useAuthToken(); // Ottieni il token che contiene le informazioni dell'utente
-    const decodedToken = decodeToken(token); // Decodifica il token per ottenere dettagli come firstName e lastName
-    const userSession = useSession(); // Informazioni di sessione (potrebbe includere dati aggiuntivi)
-    const [profileImage, setProfileImage] = useState('/assets/camel_logo.jpg');
-    const [bannerImage, setBannerImage] = useState('/assets/banner_camel2.webp');
-    const [userPosts, setUserPosts] = useState([]);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [profileData, setProfileData] = useState({
+        bannerImage: '/default_banner.jpg',  
+        profileImage: '/default_profile.jpg', 
+        firstName: 'Nome',
+        lastName: 'Cognome',
+        bio: 'Biografia non disponibile'
+    });
+    const [token, setToken] = useState('');
+   
+
 
     useEffect(() => {
-        const loadProfileData = async () => {
+        const storedToken = localStorage.getItem('auth');
+        if (storedToken) {
+            const cleanedToken = storedToken.replace(/ /g, ''); 
+            setToken(cleanedToken);
+            console.log("Token recuperato e pulito dal localStorage:", cleanedToken);
+        } else {
+            console.error("Token non disponibile.");
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!token) return; 
+
+        const loadUserData = async () => {
             try {
+                console.log("ID utente:", decodeToken(token).userId); // Aggiungi questo log per l'ID utente
                 const profileResponse = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/userProfile`, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        'Authorization': `Bearer ${token}`
                     },
                 });
-                if (profileResponse.status === 403) {
-                    throw new Error("Accesso negato: forse il token è scaduto o non valido.");
+
+                if (profileResponse.ok) {
+                    const data = await profileResponse.json();
+                    console.log("Dati del profilo ricevuti:", data);
+                    setProfileData({ ...profileData, ...data });
+                } else {
+                    console.log("Stato HTTP ricevuto da '/userProfile':", profileResponse.status);
                 }
-                if (profileResponse.status === 404) {
-                    throw new Error("Profilo utente non trovato.");
-                }
-                if (!profileResponse.ok) {
-                    throw new Error(`Errore HTTP: ${profileResponse.status}`);
-                }
-                const profileData = await profileResponse.json();
-                // Imposta i dati del profilo
             } catch (error) {
                 console.error('Errore nel caricamento dei dati del profilo:', error.message);
             }
         };
-    
-        loadProfileData();
-    }, [token]); // Aggiunge token come dipendenza per ricaricare i dati quando cambia
-    
-    useEffect(() => {
-        // Carica i post dell'utente, se necessario
-        // Questo codice è commentato per evitare interferenze durante il debugging
-        /* const loadUserPosts = async () => {
-            if (!decodedToken) {
-                return;
-            }
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/newpost?page=${page}&pageSize=${pageSize}`, {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
 
-            if (response.ok) {
-                const data = await response.json();
-                setUserPosts(data.newposts || []);
-            }
-        };
+        loadUserData();
+    }, [token]); 
 
-        loadUserPosts(); */
-    }, [token, decodedToken, page, pageSize]); // Aggiunge le dipendenze necessarie
-
-    const handleImageChange = async (e, setImage, fieldName) => {
+    const handleImageChange = async (e, imageType) => {
         const file = e.target.files[0];
+        if (!file) return;
+
         const formData = new FormData();
-        formData.append(fieldName, file);
+        formData.append(imageType, file);
 
         try {
+            console.log("ID utente:", profileData.id); // Log dell'ID utente
             const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/updateProfileImages`, {
                 method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json' // Aggiungi il tipo di contenuto per la richiesta
                 },
-                body: formData,
+                body: JSON.stringify({
+                    userId: profileData.id, // Includi l'ID utente
+                    [imageType]: file // Includi l'immagine come file
+                }),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Errore durante il caricamento dell\'immagine');
+                throw new Error(errorData.message || 'Errore durante l aggiornamento dell immagine');
             }
 
-            const data = await response.json();
-            setImage(data.imageUrl);
+            const updatedData = await response.json();
+            setProfileData({ ...profileData, ...updatedData });
         } catch (error) {
-            console.error('Errore durante l\'aggiornamento dell\'immagine:', error);
+            console.error('Errore durante l aggiornamento dell immagine:', error);
         }
     };
-
-    const handleBannerImageChange = (e) => {
-        handleImageChange(e, setBannerImage, 'bannerImage');
-    };
-
-    const handleProfileImageChange = (e) => {
-        handleImageChange(e, setProfileImage, 'profileImage');
-    };
-
 
     return (
         <div className={styles.userProfile}>
             <div className={styles.profileBanner}>
-                <img src={bannerImage} alt="Banner" />
-                <input type="file" onChange={(e) => handleBannerImageChange(e)} accept="image/*" />
+                <img src={profileData.bannerImage} alt="Banner" />
+                <input type="file" onChange={(e) => handleImageChange(e, 'bannerImage')} accept="image/*" />
             </div>
             <div className={styles.profileContent}>
                 <div className={styles.profileSidebar}>
-                    <img src={profileImage} alt="Profile" className="rounded-circle" />
-                    <input type="file" onChange={(e) => handleProfileImageChange(e)} accept="image/*" />
-                    <h1>{userSession.firstName} {userSession.lastName}</h1>
-                    <p>Breve descrizione o biografia dell'utente.</p>
+                    <img src={profileData.profileImage} alt="Profile" className="rounded-circle" />
+                    <input type="file" onChange={(e) => handleImageChange(e, 'profileImage')} accept="image/*" />
+                    <h1>{profileData.firstName} {profileData.lastName}</h1>
+                    <p>{profileData.bio}</p>
                 </div>
                 <div className={styles.profileMain}>
                     <h2>Ultimi Post</h2>
-                    <div className={styles.posts}>
-                        {userPosts.map((post) => (
-                            <div key={post.id}> {/* Assicurati che post.id sia unico */}
-                                <h3>{post.title}</h3>
-                                <p>{post.description}</p>
-                            </div>
-                        ))}
-                    </div>
+                    {/* Componente o codice per visualizzare i post dell'utente, se presenti */}
                 </div>
             </div>
         </div>
@@ -130,7 +112,4 @@ function UserProfile() {
 }
 
 export default UserProfile;
-
-
-
 

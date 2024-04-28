@@ -19,7 +19,7 @@ const useSession = () => {
         }
         navigate('/home', { replace: true })
 
-    }, [navigate, session]); // Aggiungi `location` alla dipendenza dell'effetto
+    }, [navigate, session, location]); // Aggiungi `location` alla dipendenza dell'effetto
 
     return decodedSession;
 };

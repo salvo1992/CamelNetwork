@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId, // ID automatico generato da Mongoose
     firstName: {
         type: String,
         required: true,
@@ -24,7 +25,7 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: 0
     }
-}, { timestamps: true, strict: true })
+}, { timestamps: true, strict: true });
 
 
 module.exports = mongoose.model('userModel', UserSchema, 'users')

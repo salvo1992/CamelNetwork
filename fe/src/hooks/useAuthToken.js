@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
 
 const useAuthToken = () => {
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState('');
 
     useEffect(() => {
-        // Fetch the token once and set it
         const tokenFromStorage = localStorage.getItem('auth');
+       
+
         if (tokenFromStorage) {
-            setToken(JSON.parse(tokenFromStorage));
+            const parsedToken = JSON.parse(tokenFromStorage);
+           
+            setToken(parsedToken);
         }
-    }, []); // Empty dependency array ensures this runs once on mount
+    }, []);
 
     return token;
 };
 
 export default useAuthToken;
+
+
+

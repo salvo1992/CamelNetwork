@@ -18,7 +18,7 @@ const storage = new CloudinaryStorage({
     params: {
         folder: 'CamelNetwork/UserProfile',
         format: async (req, file) => 'png', 
-        public_id: (req, file) => file.originalname
+        public_id: (req, file) => 'user_' + req.user.id + '_' + Date.now(),
     },
 });
 
@@ -32,18 +32,27 @@ router.post('/updateProfileImages', verifyToken, parser.fields([
     console.log('Richiesta di aggiornamento immagini ricevuta');
     console.log(req.files);
     try {
-        const userId = req.user.id;
+        const userId = req.user.id; // Assicurati che l'ID utente sia incluso nel token
+        console.log('ID utente:', userId); // Aggiungi questo log per verificare l'ID utente ricevuto
+        
         const updates = {};
 
         if (req.files['profileImage']) {
-            updates.profileImage = req.files['profileImage'][0].path;
+            updates.profileImageId = req.files['profileImage'][0].path; // Salva l'URL dell'immagine di Cloudinary
         }
         if (req.files['bannerImage']) {
-            updates.bannerImage = req.files['bannerImage'][0].path;
+            updates.bannerImageId = req.files['bannerImage'][0].path; // Salva l'URL dell'immagine di Cloudinary
         }
 
-        const updatedProfile = await UserProfile.updateOne({ _id: userId }, { $set: updates });
-        console.log('Immagini aggiornate con successo');
+        console.log('Aggiornamenti:', updates); // Aggiungi questo log per verificare gli aggiornamenti prima dell'aggiornamento del profilo
+
+        const updatedProfile = await UserProfile.findOneAndUpdate({ userId }, { $set: updates }, { new: true });
+        console.log('Profilo aggiornato:', updatedProfile); // Aggiungi questo log per verificare se il profilo è stato aggiornato correttamente
+        if (!updatedProfile) {
+            return res.status(404).json({ message: 'Profilo utente non trovato' });
+        }
+
+        console.log('Immagini aggiornate con successo', updatedProfile);
         res.json({ message: 'Immagini aggiornate con successo', profile: updatedProfile });
     } catch (error) {
         console.error('Errore nell aggiornamento delle immagini:', error);
@@ -51,33 +60,32 @@ router.post('/updateProfileImages', verifyToken, parser.fields([
     }
 });
 
-router.get('/userProfile', verifyToken, async (req, res) => {
-    console.log('Richiesta di profilo utente ricevuta');
-    const { firstName, lastName } = req.user;
 
-    if (!firstName || !lastName) {
-        console.log('Nome o cognome dell\'utente non forniti');
-        return res.status(400).json({ message: 'Nome o cognome dell\'utente non forniti' });
-    }
+router.get('/userProfile', verifyToken, async (req, res) => {
+    const userId = req.user.id;
+    console.log('ID utente:', userId); // Aggiungi questo log per verificare l'ID utente ricevuto
 
     try {
-        const user = await Users.findOne({
-            firstName: { $regex: new RegExp(`^${firstName}$`, 'i') },
-            lastName: { $regex: new RegExp(`^${lastName}$`, 'i') }
-        });
+        const userProfile = await UserProfile.findOne({ userId: userId });
+        console.log('Profilo utente trovato:', userProfile); // Aggiungi questo log per verificare se il profilo utente è stato trovato
 
-        if (!user) {
-            console.log('Profilo utente non trovato per', firstName, lastName);
+        if (!userProfile) {
             return res.status(404).json({ message: 'Profilo utente non trovato' });
         }
 
-        console.log('Dati del profilo inviati con successo', user);
-        res.json(user); // Assicurati di inviare solo i dati rilevanti e non sensibili
+        const profileImageUrl = userProfile.profileImageId ? cloudinary.url(userProfile.profileImageId, { secure: true }) : '';
+        const bannerImageUrl = userProfile.bannerImageId ? cloudinary.url(userProfile.bannerImageId, { secure: true }) : '';
+
+        res.json({
+            profileImage: profileImageUrl,
+            bannerImage: bannerImageUrl,
+            biography: userProfile.biography
+        });
     } catch (error) {
-        console.error('Errore nel caricamento dei dati del profilo:', error);
         res.status(500).json({ message: 'Errore nel caricamento dei dati del profilo', error: error.toString() });
     }
 });
+
 
 module.exports = router;
 

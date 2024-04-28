@@ -1,9 +1,12 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const UsersModel = require('../models/users');
 const validateUserBody = require('../middlewares/validateUserBody')
 const verified = require('../middlewares/verifyToken')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
+
 
 router.get('/getUsers', async (request, response) => {
     const { page = 1, pageSize = 5 } = request.query;
@@ -106,35 +109,47 @@ router.get('/getUsers/byAge/:age(\\d+)', async (request, response) => {
 })
 
 router.post('/createUser', validateUserBody, async (request, response) => {
-
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(request.body.password, salt)
-
-    const newUser = new UsersModel({
-        firstName: request.body.firstName,
-        lastName: request.body.lastName,
-        email: request.body.email,
-        password: hashedPassword,
-        age: Number(request.body.age)
-    });
-
     try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(request.body.password, salt);
+
+        const newUser = new UsersModel({
+            _id: new mongoose.Types.ObjectId(), // Genera un nuovo ID automaticamente
+            firstName: request.body.firstName,
+            lastName: request.body.lastName,
+            email: request.body.email,
+            password: hashedPassword,
+            age: Number(request.body.age)
+        });
+        
         const userToSave = await newUser.save();
-        response
-            .status(201)
-            .send({
-                statusCode: 201,
-                payload: userToSave
-            })
-    } catch (e) {
-        response
-            .status(500)
-            .send({
-                statusCode: 500,
-                message: 'Internal server error'
-            })
+
+        // Genera il token
+        const token = jwt.sign(
+            { 
+                userId: userToSave._id, 
+                email: userToSave.email 
+            }, 
+            process.env.SECRET_KEY,
+            { expiresIn: '1h' } // Opzionale: specifica la scadenza del token
+        );
+
+        console.log("Utente salvato con successo:", userToSave);
+
+        // Restituisci il token come parte della risposta
+        response.status(201).send({
+            statusCode: 201,
+            token: token, // Invia il token al client
+            payload: userToSave
+        });
+    } catch (error) {
+        console.error("Errore durante il salvataggio dell'utente:", error);
+        response.status(500).send({
+            statusCode: 500,
+            message: 'Internal server error'
+        });
     }
-})
+});
 
 router.patch('/updateUser/:id', async (request, response) => {
     const { id } = request.params

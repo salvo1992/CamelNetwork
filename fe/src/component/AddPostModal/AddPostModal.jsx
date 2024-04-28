@@ -131,4 +131,3 @@ const AddNewPostModal = ({ close, show, setShow }) => {
 };
 
 export default AddNewPostModal;
-
