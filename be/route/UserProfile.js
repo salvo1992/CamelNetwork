@@ -1,94 +1,96 @@
 const express = require('express');
 const router = express.Router();
-const UserProfile = require('../models/UserProfile');
+const UserProfileModel = require('../models/UserProfile');
 const verifyToken = require('../middlewares/verifyToken');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
-const Users = require('../models/users');
 
+// Configurazione di Cloudinary
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+// Configurazione di multer con Cloudinary
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'CamelNetwork/UserProfile',
-        format: async (req, file) => 'png', 
-        public_id: (req, file) => 'user_' + req.user.id + '_' + Date.now(),
+        folder: 'CamelNetwork',
+        format: async (req, file) => 'png',
+        public_id: (req, file) => `${req.user.firstName}_${req.user.lastName}_${Date.now()}`,
     },
+    onError: (err, next) => {
+        console.error("Errore durante il caricamento su Cloudinary:", err);
+        next(err);
+    }
 });
 
 const parser = multer({ storage: storage });
 
-
-router.post('/updateProfileImages', verifyToken, parser.fields([
-    { name: 'profileImage', maxCount: 1 },
-    { name: 'bannerImage', maxCount: 1 }
-]), async (req, res) => {
-    console.log('Richiesta di aggiornamento immagini ricevuta');
-    console.log(req.files);
+// Endpoint per caricare le immagini su Cloudinary
+router.post('/UserProfile/cloudUploadImg', verifyToken, parser.single('uploadImg'), async (req, res) => {
     try {
-        const userId = req.user.id; // Assicurati che l'ID utente sia incluso nel token
-        console.log('ID utente:', userId); // Aggiungi questo log per verificare l'ID utente ricevuto
-        
-        const updates = {};
-
-        if (req.files['profileImage']) {
-            updates.profileImageId = req.files['profileImage'][0].path; // Salva l'URL dell'immagine di Cloudinary
-        }
-        if (req.files['bannerImage']) {
-            updates.bannerImageId = req.files['bannerImage'][0].path; // Salva l'URL dell'immagine di Cloudinary
+        if (!req.file) {
+            console.log("File non fornito");
+            return res.status(400).json({ message: "File non fornito" });
         }
 
-        console.log('Aggiornamenti:', updates); // Aggiungi questo log per verificare gli aggiornamenti prima dell'aggiornamento del profilo
-
-        const updatedProfile = await UserProfile.findOneAndUpdate({ userId }, { $set: updates }, { new: true });
-        console.log('Profilo aggiornato:', updatedProfile); // Aggiungi questo log per verificare se il profilo è stato aggiornato correttamente
-        if (!updatedProfile) {
-            return res.status(404).json({ message: 'Profilo utente non trovato' });
-        }
-
-        console.log('Immagini aggiornate con successo', updatedProfile);
-        res.json({ message: 'Immagini aggiornate con successo', profile: updatedProfile });
-    } catch (error) {
-        console.error('Errore nell aggiornamento delle immagini:', error);
-        res.status(500).send({ message: 'Errore durante l aggiornamento delle immagini', error });
+        // Recupera il nome e il cognome dall'oggetto utente nel token
+        const { firstName, lastName } = req.user;
+        const public_id = `${firstName}_${lastName}_${Date.now()}`;
+        console.log("File caricato:", req.file);
+        console.log("Pubblic ID generato:", public_id);
+        res.status(200).json({ source: req.file.path, public_id });
+    } catch (e) {
+        console.log("Errore durante l'upload del file:", e);
+        res.status(500).send({
+            statusCode: 500,
+            message: 'File Upload Error'
+        });
     }
 });
 
 
-router.get('/userProfile', verifyToken, async (req, res) => {
-    const userId = req.user.id;
-    console.log('ID utente:', userId); // Aggiungi questo log per verificare l'ID utente ricevuto
-
+// Endpoint per aggiornare le immagini del profilo
+router.post('/UserProfile/create', async (req, res) => {
     try {
-        const userProfile = await UserProfile.findOne({ userId: userId });
-        console.log('Profilo utente trovato:', userProfile); // Aggiungi questo log per verificare se il profilo utente è stato trovato
+        const { firstName, lastName, email, profileImage, bannerImage, biography } = req.body;
+        const newUserProfile = new UserProfileModel({
+            firstName: request.body.firstName,
+            lastName: request.body.lastName,
+            email: request.body.email,
+            profileImage:req.body.profileImage,
+            bannerImage:req.body.banner,
+            biography:req.body.biography
+        });
+        await newUserProfile.save();
+        res.status(201).json(newUserProfile);
+    } catch (error) {
+        console.error('Errore nella creazione del profilo utente:', error);
+        res.status(400).json({ message: 'Errore nella creazione del profilo utente', error: error.message });
+    }
+});
 
-        if (!userProfile) {
-            return res.status(404).json({ message: 'Profilo utente non trovato' });
+// Endpoint per recuperare il profilo dell'utente
+router.get('/UserProfile', async (req, res) => {
+    const { email } = req.query;
+    try {
+        const user = await UserProfile.findOne({ email: email });
+        if (!user) {
+            return res.status(404).send({ message: 'Utente non trovato' });
         }
-
-        const profileImageUrl = userProfile.profileImageId ? cloudinary.url(userProfile.profileImageId, { secure: true }) : '';
-        const bannerImageUrl = userProfile.bannerImageId ? cloudinary.url(userProfile.bannerImageId, { secure: true }) : '';
-
-        res.json({
-            profileImage: profileImageUrl,
-            bannerImage: bannerImageUrl,
-            biography: userProfile.biography
+        res.send({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            profileImage: user.profileImage,
+            bannerImage: user.bannerImage,
+            bio: user.bio
         });
     } catch (error) {
-        res.status(500).json({ message: 'Errore nel caricamento dei dati del profilo', error: error.toString() });
+        res.status(500).send({ message: 'Errore interno del server', error: error.message });
     }
 });
 
-
 module.exports = router;
-
-
-
-

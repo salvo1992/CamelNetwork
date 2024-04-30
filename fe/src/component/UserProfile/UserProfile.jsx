@@ -1,110 +1,161 @@
 import React, { useState, useEffect } from 'react';
-import styles from './UserProfile.module.css';
-import useAuthToken from '../../hooks/useAuthToken';  
-import { decodeToken } from 'react-jwt';
-import useSession from '../../hooks/useSession';
 import axios from 'axios';
-
+import { decodeToken } from 'react-jwt';
+import styles from './UserProfile.module.css';
 
 function UserProfile() {
+    const [formData, setFormData] = useState({});
+    const [token, setToken] = useState('');
+    const [profileFile, setProfileFile] = useState(null);
+    const [bannerFile, setBannerFile] = useState(null);
     const [profileData, setProfileData] = useState({
-        bannerImage: '/default_banner.jpg',  
-        profileImage: '/default_profile.jpg', 
+        bannerImage: '/default_banner.jpg',
+        profileImage: '/default_profile.jpg',
         firstName: 'Nome',
         lastName: 'Cognome',
         bio: 'Biografia non disponibile'
     });
-    const [token, setToken] = useState('');
-   
-
 
     useEffect(() => {
         const storedToken = localStorage.getItem('auth');
         if (storedToken) {
-            const cleanedToken = storedToken.replace(/ /g, ''); 
-            setToken(cleanedToken);
-            console.log("Token recuperato e pulito dal localStorage:", cleanedToken);
-        } else {
-            console.error("Token non disponibile.");
+            setToken(JSON.parse(storedToken));
+            console.log("Token recuperato dal localStorage:", JSON.parse(storedToken));
         }
     }, []);
 
+    const onChangeHandleBannerFile = async (e) => {
+        if (e.target.files.length > 0) {
+            const selectedFile = e.target.files[0];
+            setBannerFile(selectedFile); // Aggiorna il file del banner
+        }
+    };
+
+    const onChangeHandleProfileFile = async (e) => {
+        if (e.target.files.length > 0) {
+            const selectedFile = e.target.files[0];
+            setProfileFile(selectedFile); // Aggiorna il file del profilo
+        }
+    };
+
+    const uploadFile = async (file, fileType) => {
+        const fileData = new FormData();
+        fileData.append('uploadImg', file);
+        fileData.append('firstname', token.firstName); // Aggiungi firstName al FormData
+        fileData.append('lastname', token.lastName); // Aggiungi lastName al FormData
+
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/cloudUploadImg`, {
+                method: 'POST',
+                body: fileData,
+                headers: {
+                    'Authorization': token
+                }
+            });
+            console.log(`Risposta dall'upload del file ${fileType}:`, response);
+            return await response.json();
+        } catch (e) {
+            console.log(e.message);
+        }
+    };
+
     useEffect(() => {
-        if (!token) return; 
+        const uploadFiles = async () => {
+            if (bannerFile) {
+                const uploadedBanner = await uploadFile(bannerFile, 'banner');
+                console.log("Banner caricato:", uploadedBanner);
+                setProfileData(prevState => ({
+                    ...prevState,
+                    bannerImage: uploadedBanner.source
+                }));
+            }
 
-        const loadUserData = async () => {
+            if (profileFile) {
+                const uploadedProfile = await uploadFile(profileFile, 'profile');
+                console.log("Profile caricato:", uploadedProfile);
+                setProfileData(prevState => ({
+                    ...prevState,
+                    profileImage: uploadedProfile.source
+                }));
+
+                // Aggiungi una chiamata a submitUserProfile qui
+                submitUserProfile();
+            }
+        };
+        uploadFiles();
+    }, [bannerFile, profileFile, token]);
+
+    const submitUserProfile = async () => {
+        try {
+            const currentDate = new Date().toISOString().slice(0, 16);
+            const decodedToken = decodeToken(token); // Decodifica il token per ottenere le informazioni
+            const { email, firstName, lastName } = decodedToken; // Estrai le informazioni necessarie dal token
+            const formDataToSend = new FormData();
+            formDataToSend.append('pubDate', currentDate);
+            formDataToSend.append('email', email);
+            formDataToSend.append('imageType', 'profile');
+            formDataToSend.append('firstName', firstName);
+            formDataToSend.append('lastName', lastName);
+            formDataToSend.append('profileImage', profileData.profileImage);
+            formDataToSend.append('bannerImage', profileData.bannerImage);
+    
+            console.log("Dati del formData da inviare al server:", formDataToSend);
+    
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/create`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': token
+                },
+                body: formDataToSend,
+            });
+    
+            console.log("Risposta dalla creazione del post:", response);
+    
+            if (response.ok) {
+                const responseData = await response.json();
+                // Gestisci la risposta come necessario
+            } else {
+                console.log("Errore durante la creazione del post:", response.statusText);
+                // Gestisci gli errori di rete o del server
+            }
+        } catch (e) {
+            console.log("Errore durante la creazione del post:", e.message);
+            // Gestisci altri tipi di errori
+        }
+    };
+    
+    
+    
+    useEffect(() => {
+        const fetchUserData = async () => {
             try {
-                console.log("ID utente:", decodeToken(token).userId); // Aggiungi questo log per l'ID utente
-                const profileResponse = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/userProfile`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                });
-
-                if (profileResponse.ok) {
-                    const data = await profileResponse.json();
-                    console.log("Dati del profilo ricevuti:", data);
-                    setProfileData({ ...profileData, ...data });
+                const response = await axios.get(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile`);
+                if (response.status === 200) {
+                    console.log("Dati del profilo ricevuti:", response.data);
+                    setProfileData(prevState => ({ ...prevState, ...response.data }));
                 } else {
-                    console.log("Stato HTTP ricevuto da '/userProfile':", profileResponse.status);
+                    console.log("Errore nel recupero dei dati utente. Stato HTTP:", response.status);
                 }
             } catch (error) {
-                console.error('Errore nel caricamento dei dati del profilo:', error.message);
+                console.error('Errore nel recupero dei dati utente:', error.message);
             }
         };
 
-        loadUserData();
-    }, [token]); 
-
-    const handleImageChange = async (e, imageType) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const formData = new FormData();
-        formData.append(imageType, file);
-
-        try {
-            console.log("ID utente:", profileData.id); // Log dell'ID utente
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/updateProfileImages`, {
-                method: 'POST',
-                headers: { 
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json' // Aggiungi il tipo di contenuto per la richiesta
-                },
-                body: JSON.stringify({
-                    userId: profileData.id, // Includi l'ID utente
-                    [imageType]: file // Includi l'immagine come file
-                }),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Errore durante l aggiornamento dell immagine');
-            }
-
-            const updatedData = await response.json();
-            setProfileData({ ...profileData, ...updatedData });
-        } catch (error) {
-            console.error('Errore durante l aggiornamento dell immagine:', error);
-        }
-    };
+        fetchUserData();
+    }, [token]);
 
     return (
         <div className={styles.userProfile}>
             <div className={styles.profileBanner}>
-                <img src={profileData.bannerImage} alt="Banner" />
-                <input type="file" onChange={(e) => handleImageChange(e, 'bannerImage')} accept="image/*" />
+            {profileData.bannerImage && <img src={profileData.bannerImage} alt="Banner" />}
+                <input type="file" onChange={onChangeHandleBannerFile} accept="image/*" />
             </div>
             <div className={styles.profileContent}>
                 <div className={styles.profileSidebar}>
-                    <img src={profileData.profileImage} alt="Profile" className="rounded-circle" />
-                    <input type="file" onChange={(e) => handleImageChange(e, 'profileImage')} accept="image/*" />
+                {profileData.profileImage && <img src={profileData.profileImage} alt="Profile" className="rounded-circle" />}
+                    <input type="file" onChange={onChangeHandleProfileFile} accept="image/*" />
                     <h1>{profileData.firstName} {profileData.lastName}</h1>
                     <p>{profileData.bio}</p>
-                </div>
-                <div className={styles.profileMain}>
-                    <h2>Ultimi Post</h2>
-                    {/* Componente o codice per visualizzare i post dell'utente, se presenti */}
                 </div>
             </div>
         </div>
@@ -112,4 +163,3 @@ function UserProfile() {
 }
 
 export default UserProfile;
-
