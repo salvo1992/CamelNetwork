@@ -16,10 +16,12 @@ const userProfileSchema = new mongoose.Schema({
     },
     profileImage: {
         type: String,
+        required:true,
         default: 'URL_PREDEFINITO_DI_CLOUDINARY_PER_IMMAGINE_DEL_PROFILO'
     },
     bannerImage: {
         type: String,
+        required:true,
         default: 'URL_PREDEFINITO_DI_CLOUDINARY_PER_IMMAGINE_DEL_BANNER'
     },
     biography: {

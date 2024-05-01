@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { decodeToken } from 'react-jwt';
 import styles from './UserProfile.module.css';
@@ -9,8 +9,8 @@ function UserProfile() {
     const [profileFile, setProfileFile] = useState(null);
     const [bannerFile, setBannerFile] = useState(null);
     const [profileData, setProfileData] = useState({
-        bannerImage: '/default_banner.jpg',
-        profileImage: '/default_profile.jpg',
+        bannerImage: '/banner',
+        profileImage: '/default',
         firstName: 'Nome',
         lastName: 'Cognome',
         bio: 'Biografia non disponibile'
@@ -93,18 +93,23 @@ function UserProfile() {
             const formDataToSend = new FormData();
             formDataToSend.append('pubDate', currentDate);
             formDataToSend.append('email', email);
-            formDataToSend.append('imageType', 'profile');
             formDataToSend.append('firstName', firstName);
             formDataToSend.append('lastName', lastName);
             formDataToSend.append('profileImage', profileData.profileImage);
             formDataToSend.append('bannerImage', profileData.bannerImage);
+            formDataToSend.append('biography', 'Inserisci qui la biografia'); // Aggiungi un campo per la biografia se necessario
+
     
             console.log("Dati del formData da inviare al server:", formDataToSend);
+            console.log("Dati del formData da inviare al server:");
+            for (let [key, value] of formDataToSend.entries()) {
+                console.log(key, value); // Questo mostrerà ogni chiave e valore nel FormData
+            }
     
             const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/create`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': token
+                    'Authorization': `Bearer ${token}` // Assicurati che sia 'Bearer {token}'
                 },
                 body: formDataToSend,
             });
@@ -112,7 +117,9 @@ function UserProfile() {
             console.log("Risposta dalla creazione del post:", response);
     
             if (response.ok) {
+                console.log("Errore durante la creazione del post:", response.statusText);
                 const responseData = await response.json();
+                console.log("Profilo creato con successo", responseData);
                 // Gestisci la risposta come necessario
             } else {
                 console.log("Errore durante la creazione del post:", response.statusText);

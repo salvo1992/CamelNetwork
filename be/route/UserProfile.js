@@ -19,7 +19,7 @@ const storage = new CloudinaryStorage({
     params: {
         folder: 'CamelNetwork',
         format: async (req, file) => 'png',
-        public_id: (req, file) => `${req.user.firstName}_${req.user.lastName}_${Date.now()}`,
+        public_id: (req, file) => `${req.user.firstName}_${req.user.lastName}_${req.user.email}_${Date.now()}`,
     },
     onError: (err, next) => {
         console.error("Errore durante il caricamento su Cloudinary:", err);
@@ -38,8 +38,8 @@ router.post('/UserProfile/cloudUploadImg', verifyToken, parser.single('uploadImg
         }
 
         // Recupera il nome e il cognome dall'oggetto utente nel token
-        const { firstName, lastName } = req.user;
-        const public_id = `${firstName}_${lastName}_${Date.now()}`;
+        const { firstName, lastName,email } = req.user;
+        const public_id = `${firstName}_${lastName}_${email}_${Date.now()}`;
         console.log("File caricato:", req.file);
         console.log("Pubblic ID generato:", public_id);
         res.status(200).json({ source: req.file.path, public_id });
@@ -54,24 +54,43 @@ router.post('/UserProfile/cloudUploadImg', verifyToken, parser.single('uploadImg
 
 
 // Endpoint per aggiornare le immagini del profilo
-router.post('/UserProfile/create', async (req, res) => {
+router.post('/UserProfile/create', async (req, res) => { 
+    console.log("Dati ricevuti:", req.body); 
     try {
-        const { firstName, lastName, email, profileImage, bannerImage, biography } = req.body;
+        const { firstName, lastName, email, profileImage, bannerImage } = req.body;
+
+        if (!firstName || !lastName || !email || (!profileImage && !bannerImage)) {
+            return res.status(400).send({
+                message: 'Missing required fields or image',
+                requiredFields: ['firstName', 'lastName', 'email'],
+                requiredImage: ['profileImage', 'bannerImage']
+            });
+        }
+       
         const newUserProfile = new UserProfileModel({
-            firstName: request.body.firstName,
-            lastName: request.body.lastName,
-            email: request.body.email,
-            profileImage:req.body.profileImage,
-            bannerImage:req.body.banner,
+            firstName,
+            lastName,
+            email,
+            profileImage,
+            bannerImage,
             biography:req.body.biography
         });
+     
         await newUserProfile.save();
-        res.status(201).json(newUserProfile);
-    } catch (error) {
-        console.error('Errore nella creazione del profilo utente:', error);
-        res.status(400).json({ message: 'Errore nella creazione del profilo utente', error: error.message });
+        res.status(201).send({
+            statusCode: 201,
+            payload: 'New userprofile saved successfully'
+        });
+    } catch (e) {
+        // Gestisci eventuali errori
+        console.error('Errore nella creazione del profilo utente:', e);
+        res.status(500).send({
+            statusCode: 500,
+            message: 'Internal server error',
+            error: e.message
+        });
     }
-});
+})
 
 // Endpoint per recuperare il profilo dell'utente
 router.get('/UserProfile', async (req, res) => {
