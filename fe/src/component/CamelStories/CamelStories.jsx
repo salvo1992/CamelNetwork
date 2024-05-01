@@ -74,7 +74,7 @@ function CamelStories() {
           <video controls onClick={() => openVideoModal(video.videoUrl)}>
             <source src={video.videoUrl} type="video/mp4" />
           </video>
-          <div className={styles.videoLabel}>{formData.firstName}</div>  {/* Visualizzazione del testo sotto il video */}
+          <div className={styles.videoLabel}>{video.firstName}</div>  {/* Visualizzazione del nome specifico per ciascun video sotto il video */}
           <button onClick={() => handleDelete(video.id)}>Elimina</button>
         </div>
       ))}
@@ -83,5 +83,6 @@ function CamelStories() {
 }
 
 export default CamelStories;
+
 
 
