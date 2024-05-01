@@ -8,6 +8,8 @@ Modal.setAppElement('#root');
 function CamelStories() {
   const [videos, setVideos] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [expandedVideoUrl, setExpandedVideoUrl] = useState('');
   const [formData, setFormData] = useState({ firstName: '', videoUrl: '' });
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -37,14 +39,19 @@ function CamelStories() {
     loadVideos();
   };
 
-  const closeModal = () => setModalIsOpen(false);
-  const toggleCollapse = () => {
-    setIsCollapsed(!isCollapsed);
+  const openVideoModal = (url) => {
+    setExpandedVideoUrl(url);
+    setVideoModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setVideoModalOpen(false);
   };
 
   return (
     <div className={`${styles.container} ${isCollapsed ? styles.collapsed : ''}`}>
-      <button className={styles.arrowButton} onClick={toggleCollapse}>{isCollapsed ? '<' : '>'}</button>
+      <button className={styles.arrowButton} onClick={() => setIsCollapsed(!isCollapsed)}>{isCollapsed ? '<' : '>'}</button>
       <button className={styles.videoButton} onClick={() => setModalIsOpen(true)}>Aggiungi Video</button>
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} className={styles.reactModal}>
         <button onClick={closeModal} className={styles.closeButton}>&times;</button>
@@ -53,15 +60,21 @@ function CamelStories() {
           <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} />
           <label>Camelvideo Stories:</label>
           <input type="text" name="videoUrl" value={formData.videoUrl} onChange={handleInputChange} />
-          <button  type="submit" className={styles.inviaButton}>Invia</button>
+          <button type="submit" className={styles.inviaButton}>Invia</button>
         </form>
+      </Modal>
+      <Modal isOpen={videoModalOpen} onRequestClose={closeModal} className={styles.videoModal} contentLabel="Video Modal">
+        <video controls autoPlay style={{ width: '100%' }}>
+          <source src={expandedVideoUrl} type="video/mp4" />
+        </video>
       </Modal>
       {videos.map(video => (
         <div key={video.id} className={styles.card}>
           <h4 className={styles.username}>{video.firstName}</h4>
-          <video controls>
+          <video controls onClick={() => openVideoModal(video.videoUrl)}>
             <source src={video.videoUrl} type="video/mp4" />
           </video>
+          <div className={styles.videoLabel}>{formData.firstName}</div>  {/* Visualizzazione del testo sotto il video */}
           <button onClick={() => handleDelete(video.id)}>Elimina</button>
         </div>
       ))}
@@ -69,5 +82,6 @@ function CamelStories() {
   );
 }
 
-
 export default CamelStories;
+
+
