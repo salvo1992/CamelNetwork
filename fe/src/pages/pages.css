@@ -1,23 +1,24 @@
 .loginHeader {
-    color: rgb(72, 166, 79); /* Colore sabbia */
+    color: rgb(255, 254, 254); /* Colore sabbia */
     text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5); /* Ombreggiatura */
     font-size: 2.5rem; /* Dimensione del font più grande */
-    animation: fadeInOut 4s ease infinite alternate; /* Applica l'animazione */
+    animation: fadeInOut 6s ease infinite alternate; /* Applica l'animazione */
+    margin-bottom: 0%;
 }
 
 /* Definizione dell'animazione */
 @keyframes fadeInOut {
     0% {
         opacity: 0; /* Inizio: testo invisibile */
-        transform: translateY(-20px); /* Inizio: spostamento verso l'alto */
+        transform: translateY(-30px); /* Inizio: spostamento verso l'alto */
     }
     50% {
         opacity: 1; /* Metà: testo visibile */
-        transform: translateY(0); /* Metà: annulla lo spostamento */
+        transform: translateY(20px); /* Metà: annulla lo spostamento */
     }
     100% {
         opacity: 0; /* Fine: testo invisibile */
-        transform: translateY(-20px); /* Fine: spostamento verso l'alto */
+        transform: translateY(-30px); /* Fine: spostamento verso l'alto */
     }
 }
 .page-container {

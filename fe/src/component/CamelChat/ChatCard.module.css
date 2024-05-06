@@ -1,0 +1,63 @@
+/* ChatCard.module.css */
+
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Permette alle card di andare a capo quando non c'è spazio */
+    justify-content: center; /* Centra le card orizzontalmente */
+    gap: 20px; /* Spazio tra le card */
+    padding: 20px; /* Padding esterno per spaziatura dalla pagina */
+  }
+  
+  .chatCard {
+    flex: 0 1 calc(33.33% - 20px); /* Calcola la larghezza per mostrare tre card per riga */
+    max-width: 200px; /* Larghezza massima della card */
+    max-height: 200px; /* Altezza massima della card */
+    width: 100%; /* Imposta la larghezza al massimo consentito */
+    height: 100%; /* Imposta l'altezza al massimo consentito */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #0f0a0aa2; /* Colore di sfondo della card */
+    border-radius: 8px; /* Bordi arrotondati */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombra */
+    cursor: pointer; /* Cambia il cursore quando si passa sopra la card */
+    transition: transform 0.2s ease; /* Effetto di transizione */
+    overflow: hidden; /* Nasconde il contenuto oltre i limiti della card */
+  }
+  
+  .chatCard:hover {
+    transform: scale(3.2); /* Aumenta le dimensioni della card al passaggio del mouse */
+    transition: transform 3.5s ease; /* Aggiunge un effetto di transizione fluido */
+  }
+  
+  .chatHeader h3 {
+    margin: 0; /* Rimuove il margine del titolo */
+    font-size: 20px; /* Dimensione del testo del titolo */
+    font-weight: 600; /* Grassetto */
+    color: chocolate;
+  }
+  
+  .chatMessages {
+    overflow-y: auto; /* Aggiunge una barra di scorrimento verticale se il contenuto è più lungo della card */
+    max-height: 100px; /* Altezza massima della barra di scorrimento */
+  }
+  
+  .messageCard {
+    margin-bottom: 10px; /* Margine inferiore tra i messaggi */
+  }
+  
+  .messageCard p {
+    margin: 0; /* Rimuove il margine del paragrafo */
+    font-size: 20px; /* Dimensione del testo del messaggio */
+    color: beige;
+  }
+  .chatMessages::-webkit-scrollbar {
+    width: 5px; /* Larghezza della barra di scorrimento */
+  }
+  
+  .chatMessages::-webkit-scrollbar-thumb {
+    background-color: chocolate; /* Colore della maniglia della barra di scorrimento */
+    border-radius: 5px; /* Arrotonda i bordi della maniglia della barra di scorrimento */
+  }

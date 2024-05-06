@@ -45,19 +45,8 @@ const LoginForm = ({ toggleForm }) => {
     return (
         <>
             <form onSubmit={onSubmit} className={`card-body ${styles.cardbodyColor} p-lg-5`}>
-                <div className="text-center">
-                    <h2 className={styles.title}><span className={styles.textLong}>
-                        CamelNetwork
-                    </span></h2>
-                    <img
-                        src="https://img.freepik.com/premium-photo/camel-wearing-suit-jacket-with-tie_759095-23484.jpg"
-                        className={`img-fluid profile-image-pic img-thumbnail rounded-circle my-3 ${styles.profileImage}`}
-                        width="200px"
-                        alt="profile"
-                    />
-                </div>
-
-                <div className="mb-3">
+                <div className="text-center"></div>
+                 <div className="mb-3">
                     <input
                         onChange={onChangeInput}
                         type="email"
@@ -83,7 +72,7 @@ const LoginForm = ({ toggleForm }) => {
                 {error && <div className="alert alert-danger">{error}</div>}
 
                 <div className="text-center">
-                    <button type="submit" className="btn btn-primary px-5 mb-5 w-100">
+                    <button type="submit" className="btn btn-dark px-5 mb-5 w-100">
                         Login
                     </button>
                 </div>
@@ -91,16 +80,14 @@ const LoginForm = ({ toggleForm }) => {
                 <div
                     onClick={() => toggleForm()}
                     id="emailHelp"
-                    className="form-text text-center mb-5 text-dark"
+                    className="form-text text-center mb-5 text-white"
                 >
                     Non sei registrato?
-                    <a href="#!" className="text-dark fw-bold ms-1">
+                    <a href="#!" className="text-white fw-bold ms-1">
                         Registrati ora!
                     </a>
-                </div>
-            </form>
-            <div className="px-5">
-                <button
+                </div>  
+                            <button
                     onClick={handleLoginWithGithub}
                     className="btn btn-dark px-5 mb-3 w-100"
                 >
@@ -140,7 +127,10 @@ const LoginForm = ({ toggleForm }) => {
     </span>
     Login con Google
 </button>
-            </div>
+            </form>
+          
+  
+            
         </>
     );
 };

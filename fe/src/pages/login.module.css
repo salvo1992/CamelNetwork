@@ -1,0 +1,8 @@
+.pagecontainer {
+    height: 100vh;
+    width: 100%;
+    background-image:url("../../public/assets/sfondo-camel-network5.jpg" );
+    background-size: cover;  /* Copre interamente l'area del contenitore, potrebbe essere tagliata */
+    background-position: center;  /* Centra l'immagine nel contenitore */
+    background-repeat: no-repeat;  /* Impedisce la ripetizione dell'immagine */
+}

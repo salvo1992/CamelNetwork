@@ -66,9 +66,11 @@ const NavigationBar = () => {
                       height="70"
                       className="d-inline-block align-text-top rounded-circle"
                   />
-                  {session && session.user ? session.user.name : 'User'}
+                  {session && session.user ? session.user.name : ''}
                 </Link>
               </li>
+             </div> 
+             <div>
               <div className="dropdown-menu-button">
             <button onClick={toggleMenu} className="dropdown-toggle">
                 Menu
@@ -76,16 +78,18 @@ const NavigationBar = () => {
             {isMenuOpen && (
                 <div className="dropdown-menu-button">
                     <button className="dropdown-item"><Link className="nav-link" to="/contatti">Contattaci</Link></button>
-                    <button className="dropdown-item"><button onClick={toggleAddNewPostModal} className="btn btn-primary">
+                    <button className="dropdown-item"><button onClick={toggleAddNewPostModal} className="btn btn-dark">
                     CamelPost
                   </button></button>
-                    <button className="dropdown-item"><Link className="navbar-User" to="../UserProfile/UserProfile.jsx"></Link></button>
+                    <button className="dropdown-item"><Link className="nav-link" to="/UserProfile">UserProfile</Link></button>
                 </div>
             )}
             </ul>
           </div>
-          </div>
+             </div>
+          
         </nav>
+        
         {isAddNewPostModalOpen && (
           <AddNewPostModal
             show={isAddNewPostModalOpen}

@@ -13,6 +13,7 @@ import LanguageSettings from './component/Settings/LanguageSettings';
 import NotificationsSettings from './component/Settings/NotificationsSettings';
 import PrivacySettings from './component/Settings/PrivacySettings';
 import CamelChat from './component/CamelChat/CamelChat';
+import Contatti from './component/contatti/contatti';
 
 const App = () => {
   console.log(process.env);
@@ -32,6 +33,7 @@ const App = () => {
                   <Route path="/NotificationsSettings" element={<NotificationsSettings/>} />
                   <Route path="/PrivacySettings" element={<PrivacySettings/>} />
                   <Route path="/CamelChat" element={<CamelChat/>} />
+                  <Route path="/contatti" element={<Contatti/>} />
               </Route>
           </Routes>
       </Router>

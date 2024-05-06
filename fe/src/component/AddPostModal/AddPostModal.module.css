@@ -1,0 +1,9 @@
+.Modal{
+    background-color:rgba(0, 0, 0, 0.879) ;
+}
+.Title{
+    color:rgb(94, 90, 90)!important;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}

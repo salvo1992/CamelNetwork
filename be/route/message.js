@@ -6,24 +6,37 @@ const verifyToken = require('../middlewares/verifyToken');
 const UserModel = require('../models/users');
 
 router.post('/messages', async (req, res) => {
-    const { conversationId, senderId, text, attachments } = req.body;
+    const { conversationId, text, firstName, lastName, attachments } = req.body;
     try {
-        const message = new Message({ conversationId, senderId, text, attachments });
-        await message.save();
-        res.status(201).send(message);
+        const message = new MessageModel({ 
+            conversationId,
+            text,
+            firstName,
+            lastName,
+            attachments
+        });
+        const messageToSave = await message.save();
+        res.status(201).send({
+            statusCode: 201,
+            payload: messageToSave
+        });
     } catch (error) {
-        res.status(500).send(error);
+        console.error('Error saving message:', error);
+        res.status(500).send({
+            statusCode: 500,
+            message: 'Internal server error'
+        });
     }
 });
+
 
 router.get('/messages', async (req, res) => {
     const { conversationId } = req.query;
     try {
-        const messages = await Message.find({ conversationId });
-        res.json(messages);
+      const messages = await MessageModel.find({ conversationId: conversationId }).populate('senderId');
+      res.json(messages);
     } catch (error) {
-        res.status(500).send(error);
+      res.status(500).send(error);
     }
-});
-
+  });
 module.exports =router;

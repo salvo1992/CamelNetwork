@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
-
+import Styles from './AddPostModal.module.css';
 const AddNewPostModal = ({ close, show, setShow }) => {
     const [file, setFile] = useState(null);
     const [formData, setFormData] = useState({});
@@ -82,10 +82,10 @@ const AddNewPostModal = ({ close, show, setShow }) => {
     return (
         <Modal show={show}>
             <Modal.Header onClick={() => close()} closeButton>
-                <Modal.Title>Modal title</Modal.Title>
+                <Modal.Title className={Styles.Title}>Camel Post </Modal.Title>
             </Modal.Header>
 
-            <Modal.Body>
+            <Modal.Body className={Styles.Modal}>
                 <form encType="multipart/form-data" className="d-flex flex-column gap-3" onSubmit={submitnewpost}>
                     <input
                         onChange={onChangeHandleFile}
@@ -121,7 +121,7 @@ const AddNewPostModal = ({ close, show, setShow }) => {
                         <option value="true">Featured</option>
                         <option value="false">Not Featured</option>
                     </select>
-                    <button type="submit" className="btn btn-primary pt-2">
+                    <button type="submit" className="btn btn-secondary pt-2">
                         Add Post
                     </button>
                 </form>

@@ -90,22 +90,19 @@ const MainContent = () => {
             <div className={`card ${styles.card}`}>
                 <img src={post.cover} className={`card-img-top ${styles.cardImage}`} alt="Cover" />
                 <div className={`card-body ${styles.cardBody}`}>
-                    <h2 className={`card-title ${styles.title}`}>{post.title}</h2>
+                    <h2 className={styles.title}>{post.title}</h2>
                     <p className={`card-text ${styles.description}`}>{post.description}</p>
                     <p className={`card-text ${styles.date}`}>Data di creazione: {formattedDate}</p>
                 </div>
                 <div className={`card-footer ${styles.cardFooter}`}>
-                    <p className={`text-success ${styles.username}`}>{post.firstName} {post.lastName || 'Non trovato'}</p>
+                    <p className={styles.username}>{post.firstName} {post.lastName || 'Non trovato'}</p>
                 </div>
             </div>
         </div>
     );
 })}
             </div>
-            <AddNewPostModal />
-            <UserProfile  token={token} />
-
-        </div>
+            </div>
     );
 };
 

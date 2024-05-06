@@ -1,0 +1,111 @@
+.contattiPage {
+    padding: 50px 0;
+    
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color:#b94304;
+  }
+  
+  .contattiContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+  }
+  
+  .contattiInfo {
+    flex: 1;
+    padding-right: 20px;
+  }
+  
+  .contattiInfo h2 {
+    margin-bottom: 20px;
+    color:#b94304;
+  }
+  
+  .contattiInfo ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .contattiInfo ul li {
+    margin-bottom: 10px;
+  }
+  
+  .contattiImage {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .contattiImage img {
+    max-width: 70%;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contattiForm {
+    max-width: 600px;
+    margin: 0 auto;
+    color:#b94304;
+  }
+  
+  .contattiForm h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .contattiForm form {
+    background-color: #b94304;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+  }
+  
+  .formGroup label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+  }
+  
+  textarea {
+    height: 150px;
+  }
+  
+  .button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #0c0d0d;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #b95e04;
+  }
+  

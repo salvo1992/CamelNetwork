@@ -1,13 +1,14 @@
 .pageContainer {
     background-color: sandybrown !important;
+    margin-top: 10%!important;
     height: 80%; /* Modificato da 40% a 80% per coprire più spazio verticalmente */
-    width: 80%; /* Larghezza del container */
+    width: 70%!important; /* Larghezza del container */
     margin: auto; /* Centra il container orizzontalmente e verticalmente */
     display: flex; /* Usa Flexbox per allineare i contenuti */
     flex-direction: column; /* Imposta la direzione dei flex items */
     justify-content: center; /* Centra i contenuti verticalmente */
     align-items: center; /* Centra i contenuti orizzontalmente */
-    position: relative; /* Posizionamento relativo per posizionare assolutamente le card al suo interno */
+    
 }
 
 .cardWrapper {
@@ -18,21 +19,30 @@
     transition: transform 0.3s ease; /* Transizione per l'effetto di allargamento */
     position: relative; /* Impostato su relative per permettere la corretta transizione e sovrapposizione */
 }
-
+.title {
+    font-size: 20px; /* Dimensione del testo del titolo */
+    font-weight: 600; /* Grassetto */
+    color: chocolate;
+}
+.username{
+    font-size: 20px; /* Dimensione del testo del titolo */
+    font-weight: 600; /* Grassetto */
+    color: chocolate;
+}
 .card {
     border-radius: 8px; /* Bordi arrotondati */
-    background-color: rgb(254, 208, 92); /* Sfondo */
+    background-color: rgb(15, 14, 11)!important; /* Sfondo */
     overflow: hidden; /* Nasconde il contenuto in eccesso */
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* Transizioni per ombra e trasformazione */
     width: 100%; /* Larghezza della card */
-    position: static; /* Rimosso absolute per evitare problemi di posizionamento */
+   
 }
 
 .card:hover, .cardActive {
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3); /* Ombra più evidente */
-    transform: scale(1.05); /* Effetto di allargamento */
-    background-color: sandybrown; /* Sfondo modificato al hover */
-    z-index: 10; /* Aumenta lo z-index al hover per mantenere la card sopra le altre */
+    box-shadow: 0 0 20px rgba(255, 20, 147, 0.8); /* Ombra più evidente */
+    transform: scale(1); /* Effetto di allargamento */
+    background-color: rgba(11, 11, 11, 0.8); /* Sfondo modificato al hover */
+    z-index: 1; /* Aumenta lo z-index al hover per mantenere la card sopra le altre */
 }
 
 .cardImage {
@@ -43,7 +53,7 @@
 }
 
 .cardActive .cardImage {
-    height: 400px; /* Altezza maggiore dell'immagine per mostrare l'immagine intera */
+    height: 350px; /* Altezza maggiore dell'immagine per mostrare l'immagine intera */
 }
 
 /* Altri stili rimangono invariati */

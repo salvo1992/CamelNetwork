@@ -13,8 +13,18 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const internalStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads');
+    },
+    filename: (req, file, cb) => {
+        const fileExtension = file.originalname.split('.').pop();
+        cb(null, `${file.fieldname}-${Date.now()}.${fileExtension}`);
+    }
+});
+
 // Configurazione di multer con Cloudinary
-const storage = new CloudinaryStorage({
+const cloudStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'CamelNetwork',
@@ -27,10 +37,11 @@ const storage = new CloudinaryStorage({
     }
 });
 
-const parser = multer({ storage: storage });
+const upload = multer({ storage: internalStorage });
+const cloudUpload = multer({ storage: cloudStorage });
 
 // Endpoint per caricare le immagini su Cloudinary
-router.post('/UserProfile/cloudUploadImg', verifyToken, parser.single('uploadImg'), async (req, res) => {
+router.post('/UserProfile/cloudUploadImg', verifyToken, cloudUpload.single('uploadImg'), async (req, res) => {
     try {
         if (!req.file) {
             console.log("File non fornito");
@@ -38,10 +49,10 @@ router.post('/UserProfile/cloudUploadImg', verifyToken, parser.single('uploadImg
         }
 
         // Recupera il nome e il cognome dall'oggetto utente nel token
-        const { firstName, lastName,email } = req.user;
+        const { firstName, lastName, email } = req.user;
         const public_id = `${firstName}_${lastName}_${email}_${Date.now()}`;
         console.log("File caricato:", req.file);
-        console.log("Pubblic ID generato:", public_id);
+        console.log("Public ID generato:", public_id);
         res.status(200).json({ source: req.file.path, public_id });
     } catch (e) {
         console.log("Errore durante l'upload del file:", e);
@@ -54,7 +65,7 @@ router.post('/UserProfile/cloudUploadImg', verifyToken, parser.single('uploadImg
 
 
 // Endpoint per aggiornare le immagini del profilo
-router.post('/UserProfile/create', async (req, res) => { 
+router.post('/UserProfile/uploadImg',upload.fields('uploadImg'), async (req, res) => { 
     console.log("Dati ricevuti:", req.body); 
     try {
         const { firstName, lastName, email, profileImage, bannerImage } = req.body;

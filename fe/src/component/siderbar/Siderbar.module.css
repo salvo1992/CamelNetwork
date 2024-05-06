@@ -2,16 +2,19 @@
     position: fixed;
     left: 0;
     top: 200px; /* Parte da 100px dall'alto */
-    height: calc(100% - 100px); /* Altezza adeguata per iniziare da 100px dall'alto */
+    height: 370px;
     width: 50px; /* Larghezza di default */
-    background: rgba(255, 255, 255, 0.5); /* Semi-transparent */
+    background: rgba(10, 10, 10, 0.741); /* Semi-transparent */
     transition: width 0.5s;
     overflow-y: auto;
     padding-top: 5px;
+    z-index: 100; /* Imposta un valore di z-index per assicurarti che la barra laterale stia sopra gli altri elementi */
   }
   
+  
   .sidebar.collapsed {
-    width: 30px; /* Raddoppia la larghezza quando espansa */
+    width: 70px; /* Raddoppia la larghezza quando espansa */
+    
   }
   .sidebar:hover {
     box-shadow: 0 0 20px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
@@ -20,7 +23,7 @@
     /* Rimuovi il padding da .icon-container */
     padding: 0;
     /* Imposta l'altezza delle icone sulla metà dell'altezza della sidebar */
-    height: calc(50% - 10px); /* 10px di padding sopra e sotto */
+    height: calc(100% - 10px); /* 10px di padding sopra e sotto */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -30,12 +33,13 @@
   .icon {
     padding: 10px;
     display: flex;
-    color: #6b4423; /* Default icon color */
-    transition: color 0.3s;
+    color:  rgb(241, 14, 226); /* Default icon color */
+    text-shadow: 0 0 10px rgba(241, 14, 226, 0.8); /* Aggiungi un glow con un'ombra di colore trasparente */
+    transition: color 0.6s;
   }
   
   .icon:hover {
-    color: rgba(255, 20, 147, 0.8); /* Color on hover */
+    color: rgb(245, 239, 242); /* Color on hover */
   }
 
   
@@ -45,7 +49,7 @@
   }
   
   .sidebar::-webkit-scrollbar-thumb {
-    background-color: darkgrey; /* Scrollbar color */
+    background-color: rgb(241, 14, 226); /* Scrollbar color */
     border-radius: 10px;
   }
   

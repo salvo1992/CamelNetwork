@@ -5,10 +5,11 @@
     transition: background-color 0.3s;
     z-index: 1030;
     background-color: sandybrown !important;
-    height: 66px;
+    height: 130px;
+    
 
     &.transparent {
-        background-color: transparent !important;
+        background-color: rgba(0, 0, 0, 0.496) !important;
     }
 
     .container {
@@ -95,11 +96,12 @@
         display:none; // Inizialmente nascosto
         padding: 10px;
         border-radius: 25%;
+        color:white;
         border: 2px solid #ffffff;
         background-color: transparent;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        margin-left: auto; // Spinge il bottone tutto a destra
+      
+       // Spinge il bottone tutto a destra
 
         &:hover {
             background-color: rgba(252, 248, 248, 0.963);
@@ -125,10 +127,13 @@
 
         .navbar-brand {
             justify-content: flex-end; // Mantiene il logo a sinistra
+            
         }
 
         .dropdown-menu-button {
             display: block; // Mostra il bottone dropdown in vista mobile
+           
+           color:white;
         }
        
     }

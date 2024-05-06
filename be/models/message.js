@@ -16,14 +16,17 @@ const messageSchema = new mongoose.Schema({
          type: String,
           required: true 
         },
-
-    timestamp: {
-         type: Date,
-          default: Date.now
-         },
-
-    attachments: {
-         type: [String]
+        firstName: {
+          type: String,
+          required: true // Mantieni la richiesta per il nome, generalmente necessaria
+        },
+        lastName: {
+          type: String,
+          required: true // Mantieni la richiesta per il cognome
+        },
+     attachments: {
+         type: Array,
+         default: []
          } // URLs to images or other files
 
 },{ timestamps: true, strict: true });;
