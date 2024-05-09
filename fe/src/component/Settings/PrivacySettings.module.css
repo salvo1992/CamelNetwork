@@ -1,6 +1,9 @@
   /*css per pryvacy */
   body {
-    background-color: #F4A460; /* Codice colore per il sabbia */
+    background-image:url("../../../public/assets/CamelSfondo1.jpg" );
+    background-size: cover;  /* Copre interamente l'area del contenitore, potrebbe essere tagliata */
+    background-position: center;  /* Centra l'immagine nel contenitore */
+    background-repeat: no-repeat;  /* Impedisce la ripetizione dell'immagine */
     margin: 0; /* Rimuove i margini predefiniti */
     padding: 0; /* Rimuove il padding predefinito */
   }

@@ -1,5 +1,8 @@
 .pageContainer {
-    background-color: sandybrown !important;
+    background-image:url("../../../public/assets/CamelSfondo1.jpg" );
+    background-size: cover;  /* Copre interamente l'area del contenitore, potrebbe essere tagliata */
+    background-position: center;  /* Centra l'immagine nel contenitore */
+    background-repeat: no-repeat;  /* Impedisce la ripetizione dell'immagine */
     margin-top: 10%!important;
     height: 80%; /* Modificato da 40% a 80% per coprire più spazio verticalmente */
     width: 70%!important; /* Larghezza del container */
@@ -10,11 +13,17 @@
     align-items: center; /* Centra i contenuti orizzontalmente */
     
 }
+body{
+    background-image:url("../../../public/assets/CamelSfondo1.jpg" );
+    background-size: cover;  /* Copre interamente l'area del contenitore, potrebbe essere tagliata */
+    background-position: center;  /* Centra l'immagine nel contenitore */
+    background-repeat: no-repeat;  /* Impedisce la ripetizione dell'immagine */
+}
 
 .cardWrapper {
     width: 100%; /* Larghezza della card mantenuta al 100% del suo container */
     margin-bottom: 1rem; /* Margine inferiore */
-    height: 400px; /* Altezza fissa per tutte le card */
+    height: 450px; /* Altezza fissa per tutte le card */
     overflow: hidden; /* Nasconde il contenuto in eccesso */
     transition: transform 0.3s ease; /* Transizione per l'effetto di allargamento */
     position: relative; /* Impostato su relative per permettere la corretta transizione e sovrapposizione */
@@ -57,3 +66,45 @@
 }
 
 /* Altri stili rimangono invariati */
+
+.socialIcons i {
+    margin-right: 20px; /* Spazio tra le icone */
+    color: #d2691e; /* Colore di base delle icone */
+    cursor: pointer; /* Rende le icone cliccabili */
+    transition: color 0.3s ease, text-shadow 0.3s ease; /* Transizione per colore e shadow */
+     font-size: 24px; /* Regola la dimensione dell'icona */
+}
+
+.socialIcons i:hover {
+    color: rgb(241, 14, 226); /* Cambia il colore al passaggio del mouse in azzurro brillante */
+    text-shadow: 0 0 8px rgb(241, 14, 226), 0 0 20px rgb(241, 14, 226); /* Effetto glow azzurro */
+   
+}
+.iconCamel {
+    margin-right: 20px; /* Spazio tra le icone */
+    cursor: pointer; /* Rende le icone cliccabili */
+    transition: filter 0.3s ease; /* Transizione per gli effetti di filtro */
+    width: 36px; /* Regola la dimensione dell'icona */
+    height: 36px;
+    position: relative;
+}
+
+.iconCamel:hover {
+    filter: drop-shadow(0 0 8px rgb(241, 14, 226)) brightness(1.2); /* Aggiunge un'ombra e aumenta la luminosità */
+}
+
+.styles.cameClicked {
+    filter: brightness(150%) drop-shadow(0 0 10px limegreen)contrast(120%); /* Effetto colore verde fluo */
+}
+
+.camelClicked::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: limegreen;
+    opacity: 0.5;
+    z-index: 1;
+}

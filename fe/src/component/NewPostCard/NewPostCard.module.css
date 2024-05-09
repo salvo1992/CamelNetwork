@@ -3,3 +3,15 @@
     top: .4rem;
     right: .4rem;
 }
+.glow {
+    color: #dd1212; /* Colore dell'icona */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    margin-right: 10px; /* Distanza tra le icone */
+    transition: color 0.3s ease;
+}
+
+.glow:hover {
+    color: #ffa500; /* Cambia il colore al passaggio del mouse per un effetto accattivante */
+    text-shadow: 0 0 20px #ffa500, 0 0 30px #ffa500;
+}

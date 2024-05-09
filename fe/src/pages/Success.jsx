@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import MainLayout from '../layouts/MainLayout'
+import MainContent from '../component/HomePage/MainContent'
 
 const Success = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -12,7 +14,9 @@ const Success = () => {
 
     return (
         <div>
-            success page
+           <MainLayout>
+            <MainContent />
+        </MainLayout>
         </div>
     );
 };

@@ -1,5 +1,6 @@
 .container {
     text-align: center;
+    height: 100vh;
   }
   
   .title {
@@ -30,6 +31,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+
   }
   
   .image {
@@ -37,4 +39,4 @@
     height: auto;
   }
   
-  
+ 

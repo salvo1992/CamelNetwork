@@ -109,7 +109,7 @@ const LoginForm = ({ toggleForm }) => {
                 </button>
                 <button
     onClick={handleLoginWithGoogle}
-    className="btn btn-danger px-5 w-100"
+    className="btn btn-danger px-5 mb-3 w-100"
 >
     <span className="me-2">
         <svg

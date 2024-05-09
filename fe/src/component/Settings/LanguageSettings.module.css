@@ -1,5 +1,8 @@
 body {
-    background-color: #F4A460 !important; /* Colore sabbia per il corpo della pagina */
+  background-image:url("../../../public/assets/CamelSfondo1.jpg" );
+  background-size: cover;  /* Copre interamente l'area del contenitore, potrebbe essere tagliata */
+  background-position: center;  /* Centra l'immagine nel contenitore */
+  background-repeat: no-repeat;  /* Impedisce la ripetizione dell'immagine */
   }
   
   .container {
