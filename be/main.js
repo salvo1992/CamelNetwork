@@ -16,6 +16,11 @@ const googleRoute = require('./route/google');
 const CamelStoryRoute =require('./route/CamelStory');
 const UserProfileRoute=require('./route/UserProfile');
 const messageRoute = require('./route/message');
+const BioRoute = require('./route/Bio');
+const photoRoute = require('./route/photo');
+
+
+
 const PORT = 8080;
 const app = express();
 
@@ -36,7 +41,8 @@ app.use('/', googleRoute);
 app.use('/', CamelStoryRoute);
 app.use('/', UserProfileRoute);
 app.use('/', messageRoute);
-
+app.use('/', BioRoute);
+app.use('/', photoRoute);
 connectToDatabase()
 
 app.listen(PORT, () => console.log(`Server connected and listening on port ${PORT}`))
