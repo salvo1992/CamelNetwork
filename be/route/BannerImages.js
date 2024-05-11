@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const UserProfileModel = require('../models/UserProfile');
+const BannerImagesModel= require('../models/BannerImages');
 const verifyToken = require('../middlewares/verifyToken');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
@@ -15,15 +16,20 @@ cloudinary.config({
 const cloudStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'CamelNetwork/UserProfile',
+        folder: 'CamelNetwork/Bannerimages',
         public_id: (req, file) =>file.name  // Ensuring unique file names
     }
 });
 
-const cloudUpload = multer({ storage: cloudStorage });
+const cloudUpload = multer({ storage: cloudStorage});
 
-// Route to upload/update profile image
-router.post('/UserProfile/cloudUploadImg',  cloudUpload.single('uploadImg'), async (req, res) => {
+
+//router banner 
+
+
+
+
+router.post('/BannerImages/cloudUploadImg',  cloudUpload.single('uploadImg'), async (req, res) => {
     try {
         res.status(200).json({ source: req.file.path });
     } catch (e) {
@@ -36,16 +42,16 @@ router.post('/UserProfile/cloudUploadImg',  cloudUpload.single('uploadImg'), asy
 });
 
 // Fetch all user photos
-router.get('/UserProfile', async (req, res) => {
+router.get('/BannerImages', async (req, res) => {
     try {
-        const UserProfile = await UserProfileModel.find();  // Trova tutte le foto nel database
+        const BannerImages = await BannerImagesModel.find();  // Trova tutte le foto nel database
         res.status(200).json({
             statusCode: 200,
-            payload: UserProfile,
-            message: "UserProfile fetched successfully"
+            payload: BannerImages,
+            message: "BannerImages fetched successfully"
         });
     } catch (error) {
-        console.error("Error fetching UserProfile:", error);
+        console.error("Error fetching BannerImages:", error);
         res.status(500).json({
             statusCode: 500,
             message: 'Internal server error',
@@ -53,20 +59,20 @@ router.get('/UserProfile', async (req, res) => {
         });
     }
 });
-router.post('/UserProfile/create', async (req, res) => {
+router.post('/BannerImages/create', async (req, res) => {
     console.log('Dati ricevuti nella richiesta POST:', req.body);
     try {
-         const UserProfile = new UserProfileModel({
-            UserProfile: req.body.UserProfile,
+         const BannerImages = new BannerImagesModel({
+            BannerImages: req.body.BannerImages,
         });
 
         // Salva il nuovo post
-        await UserProfile.save();
+        await BannerImages.save();
         
         // Invia la risposta di successo
         res.status(201).send({
             statusCode: 201,
-            payload: 'New UserProfile saved successfully'
+            payload: 'New BannerImages saved successfully'
         });
     } catch (e) {
         // Gestisci eventuali errori
@@ -77,11 +83,3 @@ router.post('/UserProfile/create', async (req, res) => {
         });
     }
 });
-
-
-
-
-
-
-module.exports = router;
-

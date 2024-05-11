@@ -4,8 +4,12 @@
     margin: 0 auto;
     padding: 20px;
     height: 73vh;
+    color: #fcfcfc !important;
   }
-  
+ 
+  .setting{
+    color: #ffffff !important;;
+  }
   .setting {
     display: flex;
     align-items: center;

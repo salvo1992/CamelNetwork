@@ -12,7 +12,7 @@
   h1 {
     text-align: center;
     margin-bottom: 20px;
-    color:#b94304;
+    color:#faf7f6;
   }
   
   .contattiContent {
@@ -24,12 +24,16 @@
   
   .contattiInfo {
     flex: 1;
-    padding-right: 20px;
+    padding-right: 20px; 
+    color: rgb(232, 202, 202);
   }
-  
+  p{
+    color: #fdf7f7;
+  }
+
   .contattiInfo h2 {
     margin-bottom: 20px;
-    color:#b94304;
+    color:#fffcfa;
   }
   
   .contattiInfo ul {
@@ -39,6 +43,7 @@
   
   .contattiInfo ul li {
     margin-bottom: 10px;
+   
   }
   
   .contattiImage {
@@ -49,13 +54,13 @@
   .contattiImage img {
     max-width: 70%;
     border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px rgba(245, 243, 243, 0.979);
   }
   
   .contattiForm {
     max-width: 600px;
     margin: 0 auto;
-    color:#b94304;
+    color:#f9f6f4;
   }
   
   .contattiForm h2 {
@@ -84,7 +89,7 @@
   textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #f9f4f4;
     border-radius: 5px;
     resize: none;
   }
@@ -106,6 +111,6 @@
   }
   
   .button:hover {
-    background-color: #b95e04;
+    background-color: #129cf2;
   }
   

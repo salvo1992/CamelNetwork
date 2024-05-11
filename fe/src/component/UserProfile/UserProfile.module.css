@@ -33,7 +33,7 @@
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 2rem;
   font-weight: 700;
-  color: #ffb300;
+  color: #2e9edf;
   text-shadow: 1px 1px 2px #000;
   animation: text-glow 1.5s infinite alternate;
   position: absolute;
@@ -54,8 +54,8 @@
 
 .iconTray span {
   font-size: 24px; /* Regola la dimensione delle icone */
-  color: rgb(255, 155, 4); /* Colore base dell'icona, cambia a piacimento */
-  text-shadow: 0 0 10px rgb(0, 254, 199), 0 0 20px rgb(0, 254, 199); /* Effetto luminescente */
+  color: #2e9edf; /* Colore base dell'icona, cambia a piacimento */
+  text-shadow: 0 0 10px rgb(249, 253, 252), 0 0 20px rgb(236, 240, 240); /* Effetto luminescente */
   margin: 10px; /* Spaziatura tra le icone */
   transition: color 0.3s ease; /* Transizione fluida del colore */
 }
@@ -152,7 +152,7 @@
   margin-top: 0px;
   width: 50%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;justify-content: center;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .submitBioButton {
-  width: 40%;
+  width: 67%;
   padding: 10px 20px;
   background-color: rgb(255, 155, 4); /* Colore di base del bottone */
   border: none;

@@ -3,26 +3,34 @@ import axios from 'axios';
 import { decodeToken } from 'react-jwt';
 import styles from './UserProfile.module.css';
 import { Link } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
 
 const UserProfile = () => {
     const defaultBanner = `/assets/banner_camel2.webp`;
     const defaultUserImage = `/assets/camelutente.png`;
 
-    const [bio, setBio] = useState('');
+    const [Bio, setBio] = useState('');
     const [userBio, setUserBio] = useState('');
     const [bannerImage, setBannerImage] = useState(defaultBanner);
     const [userImage, setUserImage] = useState(defaultUserImage);
     const [userPhotos, setUserPhotos] = useState([]);
     const [token, setToken] = useState('');
-
+    const [file, setFile] = useState(null);
+    const [formData, setFormData] = useState({});
+   
     useEffect(() => {
         const storedToken = localStorage.getItem('auth');
         if (storedToken) {
-            setToken(JSON.parse(storedToken));
+            // Decodifica del token per verificare la validità
+            const decodedToken = jwtDecode(storedToken);
+            setToken(storedToken);  // Imposta il token originale decodificato nello stato
+
+            // Usa direttamente il token per fare chiamate API
+            fetchBio(storedToken);
+            fetchUserPhotos();
         }
-        fetchBio();
-        fetchUserPhotos();
     }, []);
+
 
     const handleImageUpload = async (file, type) => {
         const formData = new FormData();
@@ -32,16 +40,16 @@ const UserProfile = () => {
         const urlMap = {
             'banner': `${process.env.REACT_APP_CLOUDINARY_URL}/banner`,
             'profile': `${process.env.REACT_APP_CLOUDINARY_URL}/profile`,
-            'photo': `${process.env.REACT_APP_CLOUDINARY_URL}/photo/cloudUploadImg`
+          
         };
 
         try {
             const response = await axios.post(urlMap[type], formData, {
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: { 'Authorization': token }
             });
-            return response.data.url; // Assuming API returns the URL of the uploaded image
+            return response.data.source; // Assuming API returns the URL of the uploaded image
         } catch (error) {
-            console.error("Error uploading image to Cloudinary:", error);
+            console.error(`Error uploading image for ${type}:`, error);
         }
     };
 
@@ -51,57 +59,250 @@ const UserProfile = () => {
             const imageUrl = await handleImageUpload(file, type);
             if (type === 'banner') setBannerImage(imageUrl);
             else if (type === 'profile') setUserImage(imageUrl);
-            else fetchUserPhotos(); // Re-fetch photos if a new photo was uploaded
+           
         }
     };
 
-    const fetchBio = async (userId) => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_SERVER_BASE_URL}/bio/${userId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            setUserBio(response.data.bio);
-        } catch (error) {
-            console.error("Error fetching bio:", error);
-        }
-    };
-    
+   /*
+   const uploadProfileImage = async () => {
+        const fileData = new FormData();
+        fileData.append('uploadImg', file);
 
-    const submitBio = async () => {
-        console.log(token); // Good for debugging
         try {
-            const response = await axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/bio/create`, { userId: "yourUserId", text: bio }, { // Ensure you have a valid userId here
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/cloudUploadImg`, {
+                method: 'POST',
+                body: fileData,
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': token
                 }
             });
-            setUserBio(bio); // Update local state
-            fetchBio("yourUserId"); // Again, ensure you pass the correct userId
-        } catch (error) {
-            console.error("Error submitting bio:", error);
+            return await response.json();
+        } catch (e) {
+            console.error("Error uploading profile image:", e.message);
         }
     };
-    const editBio = async (userId, newBio) => {
+
+    const submitNewProfileImage = async (e) => {
+        e.preventDefault();
+        if (file) {
+            try {
+                const uploadedFile = await uploadProfileImage();
+                if (uploadedFile && uploadedFile.source) {
+                    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/create`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ...formData,
+                            photo: uploadedFile.source,
+                        }),
+                    });
+                    return await response.json();
+                }
+            } catch (e) {
+                console.error("Error submitting new profile image:", e.message);
+            }
+        }
+    };
+   
+   
+   
+   /banner
+   
+   const uploadBannerImage = async () => {
+        const fileData = new FormData();
+        fileData.append('uploadImg', file);
+
         try {
-            await axios.put(`${process.env.REACT_APP_SERVER_BASE_URL}/bio/${userId}`, { bio: newBio }, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/cloudUploadImg`, {
+                method: 'POST',
+                body: fileData,
+                headers: {
+                    'Authorization': token
+                }
             });
-            setUserBio(newBio); // Update local state
-        } catch (error) {
-            console.error("Error updating bio:", error);
+            return await response.json();
+        } catch (e) {
+            console.error("Error uploading banner image:", e.message);
         }
     };
-    const fetchUserPhotos = async () => {
+
+    const submitNewBannerImage = async (e) => {
+        e.preventDefault();
+        if (file) {
+            try {
+                const uploadedFile = await uploadBannerImage();
+                if (uploadedFile && uploadedFile.source) {
+                    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/create`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ...formData,
+                            photo: uploadedFile.source,
+                        }),
+                    });
+                    return await response.json();
+                }
+            } catch (e) {
+                console.error("Error submitting new banner image:", e.message);
+            }
+        }
+    };
+*/
+    
+
+// Fetch bio
+const fetchBio = async () => {
+    try {
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_BASE_URL}/bio`, );
+        setUserBio(response.data.Bio);  // Assicurati di accedere a 'Bio' se questo è il formato di risposta
+    } catch (error) {
+        console.error("Error fetching bio:", error);
+    }
+};
+
+
+
+// Submit bio
+const handleBioChange = (event) => {
+    setBio(event.target.value);
+};
+
+const submitBio = async (e) => {
+    e.preventDefault(); // Previene il comportamento di default del form submission
+console.log(Bio);
+    try {
+         await axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/bio/create`, { 
+              Bio,
+              
+          });
+        // Aggiunto per vedere la risposta del server
+        // Pulisci l'input dopo un invio riuscito
+        setBio(''); 
+    } catch (error) {
+        console.error("Errore nell'invio del bio:", error.response ? error.response.data : error);
+    }
+};
+
+
+// Edit bio
+const editBio = async (newBio, e) => {
+    try {
+         await axios.put(`${process.env.REACT_APP_SERVER_BASE_URL}/bio`, { bio: newBio }, {
+           Bio,
+        });
+        setUserBio(newBio); // Aggiorna lo stato locale
+    } catch (error) {
+        console.error("Error updating bio:", error);
+    }
+};
+const PhotoGallery = ({ UserPhotos, DeletePhoto, onChangeHandleFile, submitnewphoto }) => {}
+const fetchUserPhotos = async () => {
+    try {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/photo`, {
+            headers: {
+                'Authorization': token  // Assicurati di includere il token di autenticazione se necessario
+            }
+        });
+        const data = await response.json();
+        if (response.ok) {
+            setUserPhotos(data.payload);  // Assumi che il server restituisca un oggetto con una chiave 'payload'
+        } else {
+            throw new Error(data.message || "An error occurred while fetching photos");
+        }
+    } catch (error) {
+        console.error("Error fetching user photos:", error.message);
+    }
+};
+
+
+    const onChangeHandleFile = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    const onChangeHandleInput = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const uploadFile = async () => {
+        const fileData = new FormData();
+        fileData.append('uploadImg', file);  // Assicurati che 'uploadImg' sia il nome atteso dal server
+    
         try {
-            const response = await axios.get(`${process.env.REACT_APP_CLOUDINARY_URL}/photo`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/cloudUploadImg`, {
+                method: 'POST',
+                body: fileData,
+                headers: {
+                    'Authorization': token  // Assicurati che 'token' sia correttamente definito
+                }
             });
-            setUserPhotos(response.data.photos);
-        } catch (error) {
-            console.error("Error fetching user photos:", error);
+            console.log("Risposta dall'upload:", response);
+            return await response.json();  // Estrai e ritorna il JSON dalla risposta
+        } catch (e) {
+            console.error("Error uploading file:", e.message);
         }
     };
+
+    const submitnewphoto = async (e) => {
+        e.preventDefault();
+        const currentDate = new Date().toISOString().slice(0, 10);  // Usa slice(0, 10) per ottenere solo la data
+        setFormData({
+            ...formData,
+            pubDate: currentDate,
+            firstName: token.firstName,
+            lastName: token.lastName
+        });
+        if (file) {
+            try {
+                const uploadedFile = await uploadFile();
+                    console.log("File caricato:", uploadedFile);
+                    const bodyToSend = {
+                        ...formData,
+                        photo:  uploadedFile.source,  // Assumi che 'url' sia la chiave corretta
+                       
+                    };
+                    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/create`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                          
+                        },
+                        body: JSON.stringify(bodyToSend),
+                    });
+                    console.log("Risposta dalla creazione del post:", response);
+                    return  await response.json();
+                
+            } catch (e) {
+                console.error("Error submitting new photo:", e.message);
+            }
+        }
+    };
+
+    const DeletePhoto = async (photoId) => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/delete/${photoId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`  // Assicurati che il token sia disponibile
+                }
+            });
+            if (response.ok) {
+                setUserPhotos(prevPhotos => prevPhotos.filter(photo => photo.id !== photoId));
+            } else {
+                throw new Error('Failed to delete the photo');
+            }
+        } catch (error) {
+            console.error("Error deleting photo:", error);
+        }
+    };
+
 
  return (
         <div className={styles.container}>
@@ -117,25 +318,41 @@ const UserProfile = () => {
                 </label>
             </div>
             <div className={styles.bioInputArea}>
-                <input type="text" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Write your biography here..." className={styles.bioInput} />
-                <button onClick={submitBio} className={styles.submitBioButton}>
+            <form onSubmit={submitBio}>  {/* Utilizzo di onSubmit per gestire il submit del form */}
+            <textarea value={Bio} onChange={handleBioChange} placeholder="Write your biography here..."></textarea>
+                <button type="submit" className={styles.submitBioButton}>
                     <i className="fas fa-upload"></i> Submit Bio
                 </button>
-                {userBio && <div className={styles.userBio}>{userBio}</div>}
+            </form>
+            {userBio && <div className={styles.userBio}>{userBio}</div>}
+        </div>
+        <div className={styles.photoGallery}>
+            <h2>Photos</h2>
+            <div className={styles.photosContainer}>
+                {userPhotos.map(photo => (
+                    <div key={photo._id} className={styles.photoItem}>
+                        <img src={photo.url} alt="User Photo" className={styles.photo} />
+                        <button onClick={() => DeletePhoto(photo._id)} className="btn btn-danger">
+                            Delete
+                        </button>
+        </div>
+    ))}
+</div>
+
+            <div>
+                <form encType="multipart/form-data" className="d-flex flex-column gap-3" onSubmit={submitnewphoto}>
+                    <input
+                        onChange={onChangeHandleFile}
+                        type="file"
+                        className="form-control"
+                        name="uploadImg"
+                    />
+                    <button type="submit" className="btn btn-secondary pt-2">
+                        Add photo
+                    </button>
+                </form>
             </div>
-            <div className={styles.photoGallery}>
-                <h2 className={styles.galleryTitle}>Photos</h2>
-                <div className={styles.photosContainer}>
-                    {userPhotos.map(photo => (
-                        <img key={photo.id} src={photo.url} alt="User Photo" className={styles.photo} />
-                    ))}
-                </div>
-                <div>
-                    <label>
-                        <input type="file" onChange={handleImageChange('photo')} />
-                        <button>Add Photo</button>
-                    </label>
-                </div>
+        </div>
             <div className={styles.iconTray}>
             <Link to="/Userprofile"><span className="fas fa-user"></span></Link> {/* Icona utente */}
     <Link to="/Camelfriend"><span className="fas fa-users"></span></Link> {/* Icona gruppo utenti */}
@@ -149,8 +366,9 @@ const UserProfile = () => {
  
             </div>
         </div>
-        </div>
+
     );
+
 };
 
 export default UserProfile;

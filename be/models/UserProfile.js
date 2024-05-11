@@ -6,14 +6,10 @@ const userProfileSchema = new mongoose.Schema({
         required: true,
         ref: 'User' // Assuming you have a User model that this ID references
     },
-    profileImageUrl: {
+    UserProfile: {
         type: String,
         default: '',
     },
-    bannerImageUrl: {
-        type: String,
-        default: '',
-    }
 }, { timestamps: true, strict: true });
 
 module.exports = mongoose.model('UserProfileModel', userProfileSchema, 'UserProfile');
