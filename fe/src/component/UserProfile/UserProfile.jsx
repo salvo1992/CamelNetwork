@@ -268,7 +268,7 @@ const fetchUserPhotos = async () => {
                         photo:  uploadedFile.source,  // Assumi che 'url' sia la chiave corretta
                        
                     };
-                    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/create`, {
+                    const response = await axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/create`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

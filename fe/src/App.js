@@ -14,9 +14,8 @@ import NotificationsSettings from './component/Settings/NotificationsSettings';
 import PrivacySettings from './component/Settings/PrivacySettings';
 import CamelChat from './component/CamelChat/CamelChat';
 import Contatti from './component/contatti/contatti';
-
+import '../src/component/axios';
 const App = () => {
-  console.log(process.env);
   return (
       <Router>
           <Routes>
