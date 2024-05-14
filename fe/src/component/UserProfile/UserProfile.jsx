@@ -40,9 +40,11 @@ const UserProfile = () => {
         }
     };
 
+    
+
     const fetchLatestUserProfileImage = async () => {
         try {
-            console.log("Inizio recupero ultima immagine caricata...");
+      
             const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/latest`);
             const data = await response.json();
             if (response.ok) {
@@ -99,7 +101,7 @@ const UserProfile = () => {
    //banner
    const fetchLatestBannerImage = async () => {
     try {
-        console.log("Inizio recupero ultima immagine banner caricata...");
+      
         const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/latest`);
         const data = await response.json();
         if (response.ok) {

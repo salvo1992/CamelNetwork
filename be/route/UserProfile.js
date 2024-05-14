@@ -54,7 +54,7 @@ router.get('/UserProfile/latest', async (req, res) => {
 
         // Utilizza l'API di Cloudinary per recuperare l'ultima immagine caricata
         const result = await cloudinary.search
-            .expression('resource_type:image')
+            .expression('folder:UserProfile')
             .sort_by('created_at', 'desc')
             .max_results(1)
             .execute();
