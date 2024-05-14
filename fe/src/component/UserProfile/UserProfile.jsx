@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { decodeToken } from 'react-jwt';
 import styles from './UserProfile.module.css';
 import { Link } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
@@ -11,8 +10,8 @@ const UserProfile = () => {
 
     const [Bio, setBio] = useState('');
     const [userBio, setUserBio] = useState('');
-    const [bannerImage, setBannerImage] = useState(defaultBanner);
-    const [userImage, setUserImage] = useState(defaultUserImage);
+    const [BannerImages, setBannerImage] = useState(defaultBanner);
+    const [UserProfileImage, setUserProfileImage] = useState(defaultUserImage);
     const [userPhotos, setUserPhotos] = useState([]);
     const [token, setToken] = useState('');
     const [file, setFile] = useState(null);
@@ -28,47 +27,48 @@ const UserProfile = () => {
             // Usa direttamente il token per fare chiamate API
             fetchBio(storedToken);
             fetchUserPhotos();
+            fetchLatestBannerImage(); 
+            fetchLatestUserProfileImage();
         }
     }, []);
-
-
-    const handleImageUpload = async (file, type) => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', 'your_preset_here'); // Set this to your Cloudinary preset
-
-        const urlMap = {
-            'banner': `${process.env.REACT_APP_CLOUDINARY_URL}/banner`,
-            'profile': `${process.env.REACT_APP_CLOUDINARY_URL}/profile`,
-          
-        };
-
-        try {
-            const response = await axios.post(urlMap[type], formData, {
-                headers: { 'Authorization': token }
-            });
-            return response.data.source; // Assuming API returns the URL of the uploaded image
-        } catch (error) {
-            console.error(`Error uploading image for ${type}:`, error);
-        }
-    };
-
-    const handleImageChange = (type) => async (event) => {
+    const handleFileUpload = async (type, event) => {
         const file = event.target.files[0];
-        if (file) {
-            const imageUrl = await handleImageUpload(file, type);
-            if (type === 'banner') setBannerImage(imageUrl);
-            else if (type === 'profile') setUserImage(imageUrl);
-           
+        if (type === 'banner') {
+            await uploadBannerImage(file);
+        } else if (type === 'profile') {
+            await uploadProfileImage(file);
         }
     };
 
-   /*
-   const uploadProfileImage = async () => {
+    const fetchLatestUserProfileImage = async () => {
+        try {
+            console.log("Inizio recupero ultima immagine caricata...");
+            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/latest`);
+            const data = await response.json();
+            if (response.ok) {
+                console.log("Immagine trovata:", data.payload);
+                setUserProfileImage(data.payload); // Assume che il server restituisca un URL dell'immagine
+            } else {
+                throw new Error(data.message || "Si è verificato un errore durante il recupero dell'immagine");
+            }
+        } catch (error) {
+            console.error("Errore nel recupero dell'immagine:", error.message);
+        }
+    };
+    
+    const uploadProfileImage = async (file,token) => {
+        console.log("Starting uploadProfileImage function");
         const fileData = new FormData();
         fileData.append('uploadImg', file);
-
+    
+        console.log("FormData prepared");
+    for (let [key, value] of fileData.entries()) {
+        console.log(`${key}:`, value);
+    }
+    
         try {
+            console.log("Sending POST request to:", `${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/cloudUploadImg`);
+            console.log("Authorization token:", token);
             const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/cloudUploadImg`, {
                 method: 'POST',
                 body: fileData,
@@ -76,83 +76,82 @@ const UserProfile = () => {
                     'Authorization': token
                 }
             });
-            return await response.json();
+    
+            console.log("Response received:", response);
+    
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log("Response JSON parsed:", data);
+            return data;
         } catch (e) {
             console.error("Error uploading profile image:", e.message);
+            return null;
         }
     };
-
-    const submitNewProfileImage = async (e) => {
-        e.preventDefault();
-        if (file) {
-            try {
-                const uploadedFile = await uploadProfileImage();
-                if (uploadedFile && uploadedFile.source) {
-                    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/UserProfile/create`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            ...formData,
-                            photo: uploadedFile.source,
-                        }),
-                    });
-                    return await response.json();
-                }
-            } catch (e) {
-                console.error("Error submitting new profile image:", e.message);
-            }
-        }
-    };
-   
-   
-   
-   /banner
-   
-   const uploadBannerImage = async () => {
-        const fileData = new FormData();
-        fileData.append('uploadImg', file);
-
-        try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/cloudUploadImg`, {
-                method: 'POST',
-                body: fileData,
-                headers: {
-                    'Authorization': token
-                }
-            });
-            return await response.json();
-        } catch (e) {
-            console.error("Error uploading banner image:", e.message);
-        }
-    };
-
-    const submitNewBannerImage = async (e) => {
-        e.preventDefault();
-        if (file) {
-            try {
-                const uploadedFile = await uploadBannerImage();
-                if (uploadedFile && uploadedFile.source) {
-                    const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/create`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            ...formData,
-                            photo: uploadedFile.source,
-                        }),
-                    });
-                    return await response.json();
-                }
-            } catch (e) {
-                console.error("Error submitting new banner image:", e.message);
-            }
-        }
-    };
-*/
     
+    
+   
+
+   
+   //banner
+   const fetchLatestBannerImage = async () => {
+    try {
+        console.log("Inizio recupero ultima immagine banner caricata...");
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/latest`);
+        const data = await response.json();
+        if (response.ok) {
+            console.log("Immagine trovata:", data.payload);
+            setBannerImage(data.payload); // Assume che il server restituisca un URL dell'immagine
+        } else {
+            throw new Error(data.message || "Si è verificato un errore durante il recupero dell'immagine banner");
+        }
+    } catch (error) {
+        console.error("Errore nel recupero dell'immagine banner:", error.message);
+    }
+};
+
+
+
+
+const uploadBannerImage = async (file, token) => {
+    console.log("Starting uploadBannerImage function");
+    const fileData = new FormData();
+    fileData.append('uploadImg', file);
+
+    console.log("FormData prepared");
+    for (let [key, value] of fileData.entries()) {
+        console.log(`${key}:`, value);
+    }
+
+    try {
+        console.log("Sending POST request to:", `${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/cloudUploadImg`);
+        console.log("Authorization token:", token);
+        const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/BannerImages/cloudUploadImg`, {
+            method: 'POST',
+            body: fileData,
+            headers: {
+                'Authorization': token
+            }
+        });
+
+        console.log("Response received:", response);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Response JSON parsed:", data);
+        return data;
+    } catch (e) {
+        console.error("Error uploading banner image:", e.message);
+        return null;
+    }
+};
+  
 
 // Fetch bio
 const fetchBio = async () => {
@@ -244,9 +243,11 @@ const fetchUserPhotos = async () => {
                 }
             });
             console.log("Risposta dall'upload:", response);
-            return await response.json();  // Estrai e ritorna il JSON dalla risposta
+            const data = await response.json(); // Salviamo i dati in una variabile
+            return data; // Ritorniamo i dati
         } catch (e) {
             console.error("Error uploading file:", e.message);
+            return null; // Gestire l'errore ritornando null o un altro valore appropriato
         }
     };
 
@@ -269,7 +270,7 @@ const fetchUserPhotos = async () => {
                        
                     };
                     const response = await axios.post(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/create`, {
-                        method: 'POST',
+                      
                         headers: {
                             'Content-Type': 'application/json',
                           
@@ -287,13 +288,13 @@ const fetchUserPhotos = async () => {
 
     const DeletePhoto = async (photoId) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/delete/${photoId}`, {
-                method: 'DELETE',
+            const response = await axios.delete(`${process.env.REACT_APP_SERVER_BASE_URL}/photo/${photoId}`, {
+               
                 headers: {
-                    'Authorization': `Bearer ${token}`  // Assicurati che il token sia disponibile
+                    'Authorization': token  // Assicurati che il token sia disponibile
                 }
             });
-            if (response.ok) {
+            if (response.status === 200) {
                 setUserPhotos(prevPhotos => prevPhotos.filter(photo => photo.id !== photoId));
             } else {
                 throw new Error('Failed to delete the photo');
@@ -305,18 +306,20 @@ const fetchUserPhotos = async () => {
 
 
  return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>Camel Network User Profile</h1>
-            <div className={styles.banner} style={{ backgroundImage: `url(${bannerImage})` }}>
-                <label className={styles.imageUploader}>
-                    <input type="file" onChange={handleImageChange('banner')} className={styles.imageInput} />
-                    <span>Change Banner</span>
-                </label>
-                <label className={styles.userLogo} style={{ backgroundImage: `url(${userImage})` }}>
-                    <input type="file" onChange={handleImageChange('profile')} className={styles.imageInput} />
-                    <span>Change Profile Image</span>
-                </label>
-            </div>
+    <div className={styles.container}>
+    <h1 className={styles.title}>Camel Network User Profile</h1>
+    <div className={styles.banner} style={{ backgroundImage: `url(${BannerImages})` }}>
+        <label className={styles.imageUploader}>
+            <input type="file" onChange={(e) => handleFileUpload('banner', e)} className={styles.imageInput} />
+            <span>Change Banner</span>
+        </label>
+        <label className={styles.userLogo} style={{ backgroundImage: `url(${UserProfileImage})` }}>
+            <input type="file" onChange={(e) => handleFileUpload('profile', e)} className={styles.imageInput} />
+            <span>Change Profile Image</span>
+        </label>
+    </div>
+
+
             <div className={styles.bioInputArea}>
             <form onSubmit={submitBio}>  {/* Utilizzo di onSubmit per gestire il submit del form */}
             <textarea value={Bio} onChange={handleBioChange} placeholder="Write your biography here..."></textarea>
@@ -331,8 +334,8 @@ const fetchUserPhotos = async () => {
             <div className={styles.photosContainer}>
                 {userPhotos.map(photo => (
                     <div key={photo._id} className={styles.photoItem}>
-                        <img src={photo.url} alt="User Photo" className={styles.photo} />
-                        <button onClick={() => DeletePhoto(photo._id)} className="btn btn-danger">
+                        <img src={photo.photo || 'path/to/default/image.jpg'} alt="User Photo" className={styles.photo} />
+                        <button onClick={() => DeletePhoto(photo.photo || 'path/to/default/image.jpg')} className="btn btn-danger">
                             Delete
                         </button>
         </div>
@@ -354,7 +357,7 @@ const fetchUserPhotos = async () => {
             </div>
         </div>
             <div className={styles.iconTray}>
-            <Link to="/Userprofile"><span className="fas fa-user"></span></Link> {/* Icona utente */}
+     <Link to="/Userprofile"><span className="fas fa-user"></span></Link> {/* Icona utente */}
     <Link to="/Camelfriend"><span className="fas fa-users"></span></Link> {/* Icona gruppo utenti */}
     <Link to="/Camelartist"><span className="fas fa-paint-brush"></span></Link> {/* Icona pittura */}
     <Link to="/Camelchat"><span className="fas fa-comments"></span></Link> {/* Icona chat */}

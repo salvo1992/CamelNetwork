@@ -9,6 +9,8 @@
   padding: 20px;
   box-sizing: border-box; /* Include padding e border nel calcolo della larghezza */
 }
+
+
 .banner {
   width: 100%;
   height: 250px; /* Altezza fissa per il banner */
@@ -100,20 +102,13 @@
 
 .photosContainer {
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
-  justify-content: center;
-  padding: 10px;
-}
-
-.photoItem {
-  width: 100px; /* o la dimensione desiderata */
-  height: 100px; /* o la dimensione desiderata */
-  background-size: cover;
   background-position: center;
+  padding: 10px;
   border-radius: 4px;
-}
-@media (max-width: 768px) {
+  flex-direction: row;
+  align-items: flex-end;
+}@media (max-width: 768px) {
   .bioInput, .submitBioButton {
       width: 95%; /* Più larghi su schermi piccoli */
   }
@@ -121,6 +116,15 @@
       width: calc(100% / 2 - 20px); /* Due foto per riga su dispositivi più piccoli */
   }
 }
+
+
+.photo {
+  width: 100%; /* o una larghezza fissa, ad esempio 200px */
+  height: auto; /* mantiene il rapporto dell'immagine */
+  display: block; /* elimina spazi bianchi sotto l'immagine */
+}
+
+
 
 .imageUploader{
  
@@ -153,7 +157,7 @@
   width: 50%;
   display: flex;
   flex-direction: column;
-  align-items: center;justify-content: center;
+  align-items: stretch;
 }
 
 .bioInput:focus {
@@ -199,7 +203,7 @@ p{
   color: white;
 }
 .photo {
-  width: calc(100% / 3 - 20px); /* Tre foto per riga con un po' di spazio */
+ 
   margin: 10px;
   height: auto; /* Mantiene il rapporto aspetto originale */
 }

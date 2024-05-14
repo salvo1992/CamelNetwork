@@ -5,7 +5,9 @@ const verifyToken = require('../middlewares/verifyToken');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
+
 // Setup for Cloudinary
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -23,11 +25,21 @@ const cloudStorage = new CloudinaryStorage({
 const cloudUpload = multer({ storage: cloudStorage });
 
 // Route to upload/update profile image
-router.post('/UserProfile/cloudUploadImg',  cloudUpload.single('uploadImg'), async (req, res) => {
+router.post('/UserProfile/cloudUploadImg', cloudUpload.single('uploadImg'), async (req, res) => {
+    console.log("Starting file upload process");
+    
     try {
+        console.log("Request received. Checking file...");
+        if (!req.file) {
+            throw new Error('No file uploaded');
+        }
+
+        console.log("File received:", req.file);
+        console.log("File path:", req.file.path);
+
         res.status(200).json({ source: req.file.path });
     } catch (e) {
-        console.log(e);
+        console.log("Error during file upload process:", e);
         res.status(500).send({
             statusCode: 500,
             message: 'File Upload Error'
@@ -36,52 +48,31 @@ router.post('/UserProfile/cloudUploadImg',  cloudUpload.single('uploadImg'), asy
 });
 
 // Fetch all user photos
-router.get('/UserProfile', async (req, res) => {
+router.get('/UserProfile/latest', async (req, res) => {
     try {
-        const UserProfile = await UserProfileModel.find();  // Trova tutte le foto nel database
-        res.status(200).json({
-            statusCode: 200,
-            payload: UserProfile,
-            message: "UserProfile fetched successfully"
-        });
+        console.log("Inizio recupero ultima immagine caricata da Cloudinary...");
+
+        // Utilizza l'API di Cloudinary per recuperare l'ultima immagine caricata
+        const result = await cloudinary.search
+            .expression('resource_type:image')
+            .sort_by('created_at', 'desc')
+            .max_results(1)
+            .execute();
+
+        if (result.resources.length === 0) {
+            console.error("Nessuna immagine trovata.");
+            return res.status(404).json({ message: 'Nessuna immagine trovata' });
+        }
+
+        const latestImage = result.resources[0];
+        console.log("Ultima immagine trovata:", latestImage.secure_url);
+        res.status(200).json({ payload: latestImage.secure_url });
     } catch (error) {
-        console.error("Error fetching UserProfile:", error);
-        res.status(500).json({
-            statusCode: 500,
-            message: 'Internal server error',
-            error: error.message  // Includi il messaggio di errore per un debugging più facile
-        });
+        console.error("Errore nel recupero dell'immagine da Cloudinary:", error);
+        res.status(500).json({ message: 'Errore interno del server' });
     }
 });
-router.post('/UserProfile/create', async (req, res) => {
-    console.log('Dati ricevuti nella richiesta POST:', req.body);
-    try {
-         const UserProfile = new UserProfileModel({
-            UserProfile: req.body.UserProfile,
-        });
-
-        // Salva il nuovo post
-        await UserProfile.save();
-        
-        // Invia la risposta di successo
-        res.status(201).send({
-            statusCode: 201,
-            payload: 'New UserProfile saved successfully'
-        });
-    } catch (e) {
-        // Gestisci eventuali errori
-        console.error(e);
-        res.status(500).send({
-            statusCode: 500,
-            message: 'Internal server error'
-        });
-    }
-});
-
-
-
 
 
 
 module.exports = router;
-

@@ -14,7 +14,9 @@ import NotificationsSettings from './component/Settings/NotificationsSettings';
 import PrivacySettings from './component/Settings/PrivacySettings';
 import CamelChat from './component/CamelChat/CamelChat';
 import Contatti from './component/contatti/contatti';
+import Contatore from './component/UserProfile/Camelartist';
 import '../src/component/axios';
+
 const App = () => {
   return (
       <Router>
@@ -33,6 +35,7 @@ const App = () => {
                   <Route path="/PrivacySettings" element={<PrivacySettings/>} />
                   <Route path="/CamelChat" element={<CamelChat/>} />
                   <Route path="/contatti" element={<Contatti/>} />
+                  <Route path="/Camelartist" element={<Contatore/>} />
               </Route>
           </Routes>
       </Router>

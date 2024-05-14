@@ -18,7 +18,7 @@ const UserProfileRoute=require('./route/UserProfile');
 const messageRoute = require('./route/message');
 const BioRoute = require('./route/Bio');
 const photoRoute = require('./route/photo');
-
+const BannerImages=require('./route/BannerImages');
 
 
 const PORT = 8080;
@@ -43,6 +43,7 @@ app.use('/', UserProfileRoute);
 app.use('/', messageRoute);
 app.use('/', BioRoute);
 app.use('/', photoRoute);
+app.use('/', BannerImages);
 connectToDatabase()
 
 app.listen(PORT, () => console.log(`Server connected and listening on port ${PORT}`))
