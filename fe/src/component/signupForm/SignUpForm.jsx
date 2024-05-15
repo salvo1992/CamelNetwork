@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import Styles from '../loginForm/LoginForm.module.css'
 const SignupForm = ({ toggleForm }) => {
     const [signupFormData, setSignupFormData] = useState({});
 
@@ -38,9 +38,9 @@ const SignupForm = ({ toggleForm }) => {
     };
 
     return (
-        <form
+        <form 
             onSubmit={onSubmit}
-            className="card-body cardbody-color p-lg-5"
+            className={Styles.logincard}
         >
             <div className="text-center">
                 <img
@@ -123,10 +123,10 @@ const SignupForm = ({ toggleForm }) => {
             <div
                 onClick={() => toggleForm()}
                 id="emailHelp"
-                className="form-text text-center mb-5 text-dark"
+                className="form-text text-center mb-5 text-white"
             >
                 Sei già registrato?
-                <a href="#" className="text-dark fw-bold ms-1">
+                <a href="#" className="text-white fw-bold ms-1">
                     Effettua il login!
                 </a>
             </div>

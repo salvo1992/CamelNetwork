@@ -1,8 +1,34 @@
 .pagecontainer {
-    height: 100vh;
+    height: 110vh;
     width: 100%;
     background-image:url("../../public/assets/sfondo-camel-network5.jpg" );
     background-size: cover;  /* Copre interamente l'area del contenitore, potrebbe essere tagliata */
     background-position: center;  /* Centra l'immagine nel contenitore */
     background-repeat: no-repeat;  /* Impedisce la ripetizione dell'immagine */
+
+}
+/* Styles.css */
+
+
+.login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 200px;
+
+}
+
+@media (min-height:380px) {
+    .login{
+        justify-content: flex-start; /* Allinea in basso per schermi più alti di 650px */
+        margin:150px;
+    }
+}
+
+@media (max-width: 1998px) {
+    .login {
+        justify-content: center; /* Allinea in basso per schermi più piccoli */
+        margin: 25px; /* Riduce il margine per schermi più piccoli */
+    }
 }

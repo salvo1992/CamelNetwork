@@ -17,7 +17,7 @@ const Login = () => {
                             CamelNetwork Login
                                Benvenuti
                         </h2>
-                        <div className="card my-5">
+                        <div className={Styles.login}>
                             {showSignupForm ? (
                                 <SignupForm toggleForm={toggleForm} />
                             ) : <LoginForm toggleForm={toggleForm} />

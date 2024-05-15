@@ -10,8 +10,16 @@ flex-direction: column;
 .textLong {
     letter-spacing: 15px; /* Aggiungi spaziatura tra le lettere per allungare il testo */
 }
+.logincard{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 60%;
+  
+}
+
 
 .cardbodyColor{
+  height: 100%;
     background-color:rgba(10, 31, 114, 0.446) var(--bs-card-bg) ; /* Colore di sfondo */
     border-radius: 20px;
     position: absolute;

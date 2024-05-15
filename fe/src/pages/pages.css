@@ -21,10 +21,5 @@
         transform: translateY(-30px); /* Fine: spostamento verso l'alto */
     }
 }
-.page-container {
-    background-image:url("../../public/assets/CamelSfondo1.jpg" );
-    background-size: cover;  /* Copre interamente l'area del contenitore, potrebbe essere tagliata */
-    background-position: center;  /* Centra l'immagine nel contenitore */
-    background-repeat: no-repeat;  /* Impedisce la ripetizione dell'immagine */
-}
+
 
