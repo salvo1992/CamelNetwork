@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Settings.module.css';
 import { FaUser, FaEnvelope, FaLock, FaLanguage, FaBell, FaShieldAlt } from 'react-icons/fa';
+import Sidebar from '../siderbar/Siderbar';
 
 function Settings() {
   return (
@@ -37,6 +38,7 @@ function Settings() {
         <div className={styles.label}>Privacy e sicurezza</div>
         <Link to="/PrivacySettings" className={styles.link}>Modifica</Link>
       </div>
+      <Sidebar className={styles.sidebar} />
     </div>
   );
 }

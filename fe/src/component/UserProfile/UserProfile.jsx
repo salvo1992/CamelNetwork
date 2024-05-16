@@ -3,6 +3,8 @@ import axios from 'axios';
 import styles from './UserProfile.module.css';
 import { Link } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
+import CamelStories from '../CamelStories/CamelStories';
+import Footer from '../footer/Footer';
 
 const UserProfile = () => {
     const defaultBanner = `/assets/banner_camel2.webp`;
@@ -320,7 +322,18 @@ const fetchUserPhotos = async () => {
             <span>Change Profile Image</span>
         </label>
     </div>
-
+ <div className={styles.iconTray}>
+     <Link to="/Userprofile"><span className="fas fa-user"></span></Link> {/* Icona utente */}
+    <Link to="/Camelfriend"><span className="fas fa-users"></span></Link> {/* Icona gruppo utenti */}
+    <Link to="/Camelartist"><span className="fas fa-paint-brush"></span></Link> {/* Icona pittura */}
+    <Link to="/Camelchat"><span className="fas fa-comments"></span></Link> {/* Icona chat */}
+    <Link to="/settings"><span className="fas fa-cog"></span></Link> {/* Icona ingranaggio */}
+    <Link to="/#"><span className="fas fa-door-open"></span></Link> {/* Icona porta */}
+    <Link to="/walk"><span className="fas fa-walking"></span></Link> {/* Icona passi */}
+    <Link to="/notificationsSettings"><span className="fas fa-bell"></span></Link> {/* Icona campanello */}
+    <Link to="/CamelMusic"><span className="fas fa-music"></span></Link> {/* Icona matita */}
+ 
+            </div>
 
             <div className={styles.bioInputArea}>
             <form onSubmit={submitBio}>  {/* Utilizzo di onSubmit per gestire il submit del form */}
@@ -358,18 +371,8 @@ const fetchUserPhotos = async () => {
                 </form>
             </div>
         </div>
-            <div className={styles.iconTray}>
-     <Link to="/Userprofile"><span className="fas fa-user"></span></Link> {/* Icona utente */}
-    <Link to="/Camelfriend"><span className="fas fa-users"></span></Link> {/* Icona gruppo utenti */}
-    <Link to="/Camelartist"><span className="fas fa-paint-brush"></span></Link> {/* Icona pittura */}
-    <Link to="/Camelchat"><span className="fas fa-comments"></span></Link> {/* Icona chat */}
-    <Link to="/settings"><span className="fas fa-cog"></span></Link> {/* Icona ingranaggio */}
-    <Link to="/#"><span className="fas fa-door-open"></span></Link> {/* Icona porta */}
-    <Link to="/walk"><span className="fas fa-walking"></span></Link> {/* Icona passi */}
-    <Link to="/notificationsSettings"><span className="fas fa-bell"></span></Link> {/* Icona campanello */}
-    <Link to="/CamelMusic"><span className="fas fa-music"></span></Link> {/* Icona matita */}
- 
-            </div>
+        <CamelStories className={styles.CamelStories}/>
+        <Footer/>
         </div>
 
     );

@@ -4,7 +4,6 @@ import Login from './pages/Login'
 import ProtectedRoutes from "./middlewares/ProtectedRoutes";
 import Success from "./pages/Success";
 import UserProfile from './component/UserProfile/UserProfile';
-import MainLayoutUser from './layouts/MainLayoutUser';
 import Settings from './component/Settings/Settings';
 import ProfileSettings from './component/Settings/ProfileSettings';
 import EmailSettings from './component/Settings/EmailSettings';
@@ -17,6 +16,7 @@ import Contatti from './component/contatti/contatti';
 import Contatore from './component/UserProfile/Camelartist';
 import '../src/component/axios';
 
+
 const App = () => {
   return (
       <Router>
@@ -25,8 +25,8 @@ const App = () => {
               <Route path="/success" element={<Success />}/>
               <Route element={<ProtectedRoutes/>}>
                   <Route path="/home" element={<Home />} />
-                  <Route path="/UserProfile" element={<MainLayoutUser> <UserProfile /> </MainLayoutUser>} />
-                  <Route path="/Settings" element={<MainLayoutUser> <Settings /> </MainLayoutUser>} />
+                  <Route path="/UserProfile" element={ <UserProfile /> } />
+                  <Route path="/Settings" element={   <Settings />  } />
                   <Route path="/ProfileSettings" element={<ProfileSettings/>} />
                   <Route path="/EmailSettings" element={<EmailSettings/>} />
                   <Route path="/PasswordSettings" element={<PasswordSettings/>} />

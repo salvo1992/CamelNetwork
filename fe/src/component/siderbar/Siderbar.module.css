@@ -13,9 +13,14 @@
   
   
   .sidebar.collapsed {
-    width: 70px; /* Raddoppia la larghezza quando espansa */
-    
-  }
+    width: 20px; /* Larghezza della barra laterale quando è collassata */
+    transition: width 0.3s; /* Aggiunge una transizione per la larghezza */
+}
+
+/* Nasconde le icone quando la barra laterale è collassata */
+.sidebar.collapsed .icon {
+    display: none; /* Puoi usare anche visibility: hidden; se preferisci */
+}
   .sidebar:hover {
     box-shadow: 0 0 20px rgba(255, 20, 147, 0.8); /* Glow rosa fluo al passaggio del mouse */
   }

@@ -3,8 +3,12 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    height: 73vh;
+    height: 100vh;
     color: #fcfcfc !important;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+
   }
  
   .setting{
@@ -35,4 +39,9 @@
     text-decoration: underline;
   }
       
+  .sidebar{
+    top: 400px;
+
   
+    
+  }
