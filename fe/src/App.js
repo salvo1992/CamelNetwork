@@ -23,7 +23,7 @@ const App = () => {
           <Routes>
               <Route exact path="/" element={<Login />} />
               <Route path="/success" element={<Success />}/>
-              <Route element={<ProtectedRoutes>
+              {<ProtectedRoutes>
                   <Route path="/home" element={<Home />} />
                   <Route path="/UserProfile" element={ <UserProfile /> } />
                   <Route path="/Settings" element={   <Settings />  } />
@@ -36,7 +36,7 @@ const App = () => {
                   <Route path="/CamelChat" element={<CamelChat/>} />
                   <Route path="/contatti" element={<Contatti/>} />
                   <Route path="/Camelartist" element={<Contatore/>} />
-                  </ProtectedRoutes>} />
+                  </ProtectedRoutes>} 
               
           </Routes>
       </Router>
